@@ -1,0 +1,14 @@
+ dirOPP="E:\\NFS_2019\\2019_138_OPP"
+ 
+ listOPP=list.files(dirOPP,full.names=T)
+ fin=NULL
+  for (i in 1:length(listOPP)) {
+ subdir=listOPP[i]
+  pthMyErr=paste0(subdir,"\\Predict\\Check_differenceNFSAdult_",basename(subdir),".csv")
+  pthAlxErr=paste0(subdir,"\\Predict\\report_",basename(subdir),".csv")
+  if (file.exists(pthAlxErr)==F) {pthAlxErr=paste0(subdir,"\\report_",basename(subdir),".csv")}
+ # if (file.exists(pthMyErr)==T) {MyErr=read.csv(pthMyErr);MyErr$date=basename(subdir);fin=rbind(fin,MyErr)}
+  if (file.exists(pthAlxErr)==T) {AlxErr=read.csv(pthAlxErr);fin=rbind(fin,AlxErr)}
+  
+  
+  }

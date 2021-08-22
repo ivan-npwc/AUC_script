@@ -1,0 +1,108 @@
+	 library(RSQLite)
+ library(dplyr)
+
+	DBfrom=  "C:\\Users\\SSL\\Desktop\\2018_55-75_OPP_old.db"
+	
+	#"D:\\Google Drive (ivan@npwc.us)\\DATA\\SSL\\2018_55-75_OPP_old.db"
+	 DBto= "C:\\Users\\SSL\\Desktop\\NEW DB -test.db"
+
+
+
+	
+    Sys.setlocale("LC_ALL","Russian_Russia.20866")
+    sqlite    <- dbDriver("SQLite")
+    FromDB <- dbConnect(sqlite,   DBfrom)
+    ToDB<- dbConnect(sqlite,   DBto)
+    photo_count <<- dbGetQuery(FromDB, paste0("SELECT  *  FROM  photo_count;"))
+    photo_count_list <<- dbGetQuery(FromDB, paste0("SELECT  *  FROM  photo_count_list;"))
+    photo_count_files <<- dbGetQuery(FromDB, paste0("SELECT  *  FROM  photo_count_files;"))
+	
+	photo_count$file_name=gsub("G","D",photo_count$file_name)
+	photo_count$species="EJ"
+	photo_count$label= NULL
+	photo_count$site=substr(photo_count$local_site,1,2)
+	photo_count$site[photo_count$site =="No"]="71"
+	
+	
+	
+	###################NEW PHOTO_COUNT_LIST
+	linkPthoto_count=	photo_count%>%
+	                   select(r_date,site,r_year,species,time_start,observer,file_name) %>%
+					   group_by(r_date,site,r_year,species,time_start,observer,file_name) %>%
+					   summarise(count=n())
+	linkPthoto_count
+	
+	
+
+	photo_count_list   =data.frame(
+	r_year=linkPthoto_count$r_year,
+	site=linkPthoto_count$site,
+	r_date= linkPthoto_count$r_date,
+	time_start= linkPthoto_count$time_start,
+	observer=linkPthoto_count$observer,
+	comments="Corrected 20200207",
+	visibility="More then 50",
+	rain= "No",
+	distance="25",
+	type="Agisoft",
+	quality="Not  bad Count",
+	splash="Moderate splash",
+	datecreated="15:38:02 2019 03 25",
+	species= linkPthoto_count$species
+	)
+########################################### NEW PHOTO_COUNT_FILES
+	photo_count_files=data.frame (
+	r_year=linkPthoto_count$r_year,
+	site=linkPthoto_count$site,
+	r_date= linkPthoto_count$r_date,
+	time_start=linkPthoto_count$time_start,
+	observer=linkPthoto_count$observer,
+	comment="Corrected 20200207",
+	datecreated="15:38:02 2019 03 25",
+	file_name=linkPthoto_count$file_name
+	)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+  SQLiteWriteFunction(
+    GPSAltitude=GPSAltitude,
+    site=strsplit(basename(pthOPP),"_")[[1]][2],
+    r_year =  format(as.POSIXct(strptime(KK_Effort3$date, "%Y%m%d")),"%Y"),          
+    r_date= r_date1,
+    time_start= KK_Effort3$time_start , # format(as.POSIXct(strptime(paste0(KK_Effort3$time_start), "%Y:%m:%d %H:%M:%S")),"%Y:%m:%d %H:%M:%S")
+    observer =KK_Effort3$observer,
+    animal_type=   OPP_PointsTable3$age,
+    iLeft=OPP_PointsTable3$lon,
+    iTop=OPP_PointsTable3$lat,
+    file_nameOPP=labelinput1,
+    ########################################   photo_count_list
+    visibility= KK_Effort3$visibility,
+    CommentsPCL= KK_Effort3$Comments,
+    rain= KK_Effort3$rain,
+    distance= KK_Effort3$distance,
+	type_count=KK_Effort3$type,
+    type= KK_Effort3$type,
+    quality= KK_Effort3$quality,
+    splash= KK_Effort3$splash,
+    species= SpeciesSQL,
+    #######################################   photo_count_files
+    CommentsPCF=labelinput1,      # may be something else
+    file_name= unique(OPP_InfoTable3$Img)
+  ) 
+	
+	
+	
+	
+	
+   a=photo_count[photo_count$local_site=="No local site info",]
+   
+  unique(a$r_date)
+  

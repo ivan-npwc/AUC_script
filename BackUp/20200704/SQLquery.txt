@@ -1,0 +1,38 @@
+ 
+SQLite_path="E:\\2019_138_Data\\SSL-NFS_2019_138_COUNT_newdb.db"
+
+library(dplyr)
+library(tidyr) 
+library(RSQLite)
+  
+sqlite    <- dbDriver("SQLite")
+Sys.setlocale("LC_ALL","Russian_Russia.20866")
+#options(shiny.maxRequestSize=5000*1024^2) 
+SSL <- dbConnect(sqlite, SQLite_path)
+
+if (dbExistsTable(SSL,"photo_count_pivot")==F) {
+query=paste0("CREATE TABLE photo_count_pivot (species TEXT, r_year  INT, site INT, r_date  DATE, time_start TIME, observer TEXT, local_site TEXT,TN INT,TF INT,An INT,Sa INT,F INT,J INT,P INT,U INT, D INT, DP INT, Tr INT, Bch INT,
+PRIMARY KEY (r_year, site, r_date, time_start, species,observer));")
+dbExecute(SSL,query)
+}
+
+    photo_count <<- dbGetQuery(SSL, paste0("SELECT  *  FROM  photo_count;"))
+ 
+	photo_count1=photo_count %>%
+	             select(r_year,site,r_date,time_start,observer,local_site,species,animal_type)%>%
+	             group_by(r_year,site,r_date,time_start,observer,local_site,species,animal_type)%>%
+				 summarize(count=n())		 
+	photo_count_r=photo_count1 %>% spread(animal_type,count)	
+	dbWriteTable(SSL, "photo_count_pivot",photo_count_r , append=T)
+	
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+

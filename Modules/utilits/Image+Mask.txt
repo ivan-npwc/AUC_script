@@ -1,0 +1,35 @@
+library (magick)
+
+generalPath= paste0(labelInput,"\\Mask_Image")
+ImagePath=paste0(generalPath,"\\", "BlobMask")
+MaskPath=paste0(generalPath,"\\", "Mask")
+PathCheck=paste0(generalPath,"\\", "Check")
+dir.create(PathCheck)
+MskList=list.files(MaskPath)
+
+
+
+library(parallel)
+library(doParallel)
+library(foreach)
+
+cl <- makePSOCKcluster(4) 
+clusterEvalQ(cl, {
+library(magick)
+})
+	
+registerDoParallel(cl)
+
+
+foreach(i = 1:length(MskList)) %dopar% {
+
+  mskP=paste0(MaskPath,"\\",MskList[i]) 
+  ImgP= paste0(ImagePath,"\\",gsub("png","jpg",MskList[i]))
+
+   image=image_read(ImgP)
+   mask=image_read(mskP)
+   Check=image_composite(image,mask,operator = "blend", compose_args="70")
+   PathCheckImg=paste0(PathCheck,"\\",MskList[i])
+   
+   image_write(Check,PathCheckImg,format="jpg")
+}

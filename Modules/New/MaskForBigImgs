@@ -1,0 +1,19 @@
+ houloutPth="D:\\YandexDisk\\CURRENT WORK\\WARLUS\\20190610\\Polygons\\Houlout\\Houlout.shp"
+polygon=shapefile(houloutPth)
+polygon1=poligon[polygon@data$FID==1,]
+plot(poligon1)
+
+width=4000 # it is size of my big image
+height=4000
+cex=10
+bbox=polygon1@bbox
+bbox=data.frame(bbox)
+
+xlim=c( bbox$min[1], bbox$max[1])  # it is actualy is birder big img
+ylim=c( bbox$min[2], bbox$max[2])
+
+ fig <- image_graph(width = width, height = height, res =720)
+  par(mai=c(0,0,0,0),bg=NA,fig=c(0,1,0,1),bty ="n") 
+  plot(poligon1,xlim=xlim,ylim=ylim, col="red",
+       pch=16,cex=cex,bg=16,axes=F, ann=F, xaxt='n', yaxt='n')	 
+  dev.off()

@@ -1,0 +1,19 @@
+
+pthAutoCountPol="E:\\NFS_2019\\2019_138_OPP_pups\\20190804_1652\\20190804_01\\Polygons\\Houlout\\Houlout.shp"
+pthPoints= "E:\\NFS_2019\\2019_138_OPP_pups\\20190804_1652\\20190804_01\\Observer count\\20190804.shp"
+kmlPathSave=paste0("E:\\NFS_2019\\2019_138_OPP_pups\\20190804_1652\\20190804_01\\Predict\\NFSPupAddnl_20190804.kml")
+
+
+Points=shapefile(pthPoints)
+Polygon=shapefile(pthAutoCountPol)
+
+AddPoints=point.in.poly(Points,Polygon)
+
+
+AddPoints=as.data.frame(AddPoints)
+
+    AddPoints1=AddPoints[is.na(AddPoints$LAYER.y) == T,]
+	
+    AddPoints2=data.frame(age=AddPoints1$LAYER.x,lat=AddPoints1$coords.x2,lon=AddPoints1$coords.x1)
+	
+	KMLwrite(AddPoints2,kmlPathSave)

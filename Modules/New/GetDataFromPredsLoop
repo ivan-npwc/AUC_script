@@ -1,0 +1,46 @@
+
+library(tidyr)
+library(dplyr)
+library(writexl)
+SummarizePreds=function (OPPfolder= pthOPP,
+                          Species1=Species0,
+						  savePth= paste0("Output/", Species1Preds,".xlsx")) {    
+   PredsResult=NULL	
+   MyErrorResult=NULL	
+   AlexErrorResult=NULL	
+   
+  listOPP=list.files(OPPfolder,full.names=T)
+  for (i in 1:length(listOPP)) {					  
+  labelinput1=	listOPP[i]					  
+						  
+if (Species1=="NFSAdult") {
+    PredsPth=paste0(labelinput1,"\\Predict\\NFSAdult_",basename(labelinput1),".csv")
+	MyErrorPTH= paste0(labelinput1,"\\Predict\\Check_differenceNFSAdult_",basename(labelinput1),".csv")
+	AlexErrorPTH=paste0(labelinput1,"\\report_",basename(labelinput1),".csv")
+}
+if(file.exists(PredsPth)) {Preds=read.csv(PredsPth)
+Preds1=Preds %>% group_by(age) %>%
+                 summarize(count=n()) 			 
+Preds1$date=basename(labelinput1)				 
+PredsResult=rbind(PredsResult,Preds1)
+
+if(file.exists(MyErrorPTH)) {MyError=read.csv(MyErrorPTH)
+MyError$date=basename(labelinput1)
+MyErrorResult=rbind(MyErrorResult,MyError)
+
+}
+if(file.exists(AlexErrorPTH)) {AlexError=read.csv(AlexErrorPTH)
+AlexErrorResult=rbind(AlexErrorResult,AlexError)
+
+
+}
+}else {print(paste0(labelinput1, "_No preds found"))}
+}
+PredsResult<<-PredsResult %>%
+			 spread(age,count)	
+MyErrorResult<<-MyErrorResult
+AlexErrorResult<<-AlexErrorResult
+
+write_xlsx(x = list(PredsResult=PredsResult, MyErrorResult=MyErrorResult, AlexErrorResult=AlexErrorResult), path = savePth, col_names = T)
+}
+SummarizePreds()

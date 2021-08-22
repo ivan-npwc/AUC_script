@@ -1,0 +1,34 @@
+library(EBImage)
+libraru(magick)
+MskFltr=function (ImgMskDir=paste0(labelInput,"\\Mask_Image")) {
+ if(dir.exists(ImgMskDir)==F) {stop("No Images-Masks found")}
+    MskDir= paste0(ImgMskDir,"\\Mask")
+    ImgDir=paste0(ImgMskDir,"\\Image")
+	SaveDir=paste0(ImgMskDir,"\\BlobMask")
+	if (dir.exists(SaveDir)==F) {dir.create(SaveDir)}
+
+  listMsk=list.files(MskDir,full.names=T)
+  
+   for (i in 1:length(listMsk)) {
+   pthMsk=listMsk[i]
+   pthImg=paste0(ImgDir,"\\",basename(pthMsk))
+   pthImg=gsub("png","jpg",pthImg)
+   pthSave=paste0(SaveDir,"\\",basename(pthImg))
+   Msk=readImage(pthMsk)
+   Img=readImage(pthImg)
+ 
+       Msk1 = getFrame(Msk, 1)
+       Msk2 = thresh(Msk1, 18, 18, 0.009)  
+     #  Msk2 <- fillHull(Msk2)
+     #  Msk2 = opening(Msk2, makeBrush(7,shape='disc') ) # shape='Gaussian', sigma=50
+     #  Msk2 = fillHull(Msk2)
+       Msk3= dilate(Msk2, kern=makeBrush(251, shape='disc'))
+	   
+   Img[Msk3==0]=0
+	
+   writeImage(Img,pthSave)
+
+}
+}
+
+MskFltr()
