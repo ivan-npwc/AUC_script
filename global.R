@@ -24,7 +24,7 @@ if (!require("encryptr")) {install.packages("encryptr");library("encryptr")}
 if (!require("RSQLite")) {install.packages("RSQLite")}
 #if (!require("sparklyr")) {install.packages("sparklyr");library(sparklyr);spark_install(version = "2.1.0")}
 if (!require("writexl")) {install.packages("writexl")}
-
+# test from git
 #if (!requireNamespace("BiocManager", quietly = TRUE))
 #  install.packages("BiocManager")
 #  BiocManager::install("EBImage")
