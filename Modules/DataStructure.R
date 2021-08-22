@@ -7,9 +7,9 @@
   
   library(raster)
   
-  NFSageCategoryDir= "System data/AgeCategory/NFS"	#"G:\\My Drive\\AUC_script\\System data\\AgeCategory\\NFS" #
-  SSLageCategoryDir= "System data/AgeCategory/SSL"	
-  ModelPOlSSL138Dir= "System data/Model_polygons_138"
+  NFSageCategoryDir= paste0(System_data,"/AgeCategory/NFS")	#"G:\\My Drive\\AUC_script\\System data\\AgeCategory\\NFS" #
+  SSLageCategoryDir= paste0(System_data,"/AgeCategory/SSL")	
+  ModelPOlSSL138Dir= paste0(System_data,"/Model_polygons_138")
   
    ModelPOlSSL138<<-list.files(ModelPOlSSL138Dir,full.names=T)
   NFSageCategory<<-list.files(NFSageCategoryDir,full.names=T)

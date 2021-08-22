@@ -45,19 +45,19 @@ KMLprepare=function () {
 
  
     if (check3=="b") {
-    TableNear<<-read.csv("System data/TableNear_B.csv")
+    TableNear<<-read.csv(paste0(System_data,"/TableNear_B.csv"))
   } 
     if (check3=="c") { 
-    TableNear<<-read.csv("System data/TableNear_C.csv")
+    TableNear<<-read.csv(paste0(System_data,"/TableNear_C.csv"))
   }
    if (check3=="d") {
-    TableNear<<-read.csv("System data/TableNear_D.csv")
+    TableNear<<-read.csv(paste0(System_data,"/TableNear_D.csv"))
   }
    if (check3=="e") {
-    TableNear<<-read.csv("System data/TableNear_E.csv")
+    TableNear<<-read.csv(paste0(System_data,"/TableNear_E.csv"))
   } 
      if (check3=="f") {
-    TableNear<<-read.csv("System data/TableNear_F.csv")
+    TableNear<<-read.csv(paste0(System_data,"/TableNear_F.csv"))
   } 
   
   

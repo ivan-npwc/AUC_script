@@ -30,8 +30,8 @@ if (!require("writexl")) {install.packages("writexl")}
 #  BiocManager::install("EBImage")
 
 #########################################################
-listValue <<- readRDS("System data/listUniq")
-listTMP <<-readRDS("System data/listTMP")
+listValue <<- readRDS("listUniq")
+listTMP <<-readRDS("listTMP")
 ######################
 labelInput<<-listValue$labelInput
 
@@ -63,10 +63,14 @@ Smooth<<-listValue$Smooth
 batch_size<<-listValue$batch_size
 epochs<<-listValue$epochs
 Deformation<<-listValue$Deformation
-
+System_data<<-listValue$System_data
 DirModelsCheck<<-  listValue$DirModelsCheck
 ModelCheckAlg <<- FALSE
 TrainFromBaseModel<<-TRUE
+
+System_data<<-listValue$System_data
+
+
 
 
 

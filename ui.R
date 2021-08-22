@@ -85,8 +85,8 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
 #######################################################################################################
 tabPanel("Setting",
          
-     #    fluidRow(column(width = 4, numericInput("NanmlsOnTiles", "Number animals on tiles",value=NanmlsOnTiles,min=1,max=5,step=0.1))),
-     #   hr(),
+         fluidRow(column(width = 4, actionLink('System_data',   label= paste0("System_data:  ", System_data), style = "font-size:12px;"))),
+        hr(),
             fluidRow(column(width = 12,actionLink('NFS_Adult_weight_pth',   label= paste0("NFS_Adult_weight_pth:  ", NFS_Adult_weight_pth), style = "font-size:12px;"))),
          hr(),
             fluidRow(column(width = 12,actionLink('NFS_Pup_weight_pth',   label= paste0("NFS_Pup_weight_pth:  ", NFS_Pup_weight_pth), style = "font-size:12px;"))),
@@ -153,6 +153,7 @@ tabPanel("Export",
 
          
 ),
+
 ####################################################################################################  
 
 

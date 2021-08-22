@@ -26,7 +26,8 @@ listUniq <- list(
 					   batch_size=batch_size,
 					   epochs=epochs,
 					   Deformation=Deformation,
-					   DirModelsCheck=DirModelsCheck
+					   DirModelsCheck=DirModelsCheck,
+					   System_data=System_data
 
 
                  
@@ -34,7 +35,7 @@ listUniq <- list(
 
 				  
                )
-			    saveRDS(listUniq, "System data/listUniq")
+			    saveRDS(listUniq, "listUniq")
 				
 				
 		

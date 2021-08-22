@@ -241,9 +241,13 @@ withProgress(message = paste0("Doing  ",labelInput), value = d , {
     updateActionButton (session,'DirModelsCheck',   label= paste0("DirModelsCheck:  ",DirModelsCheck))
   }) 
   #######################################################################################  
-  
-  
-  
+       re25 = observeEvent( input$System_data, {
+    System_data<<-choose.dir()
+    source("Modules/ListUniqueUpdate.r")
+    updateActionButton (session,'System_data',   label= paste0("System_data:  ",System_data))
+  }) 
+  ####################################################################################### 
+
   observeEvent(input$Unet_train, {
     Split1<<-input$Split
     BatchIntens1<<-input$BatchIntens

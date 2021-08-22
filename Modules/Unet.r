@@ -13,7 +13,7 @@ if (Species== "SSLPup") { PTHweight=SSL_Pup_weight_pth}
 if (Species== "WLRS" & Terrain =="Sand")   {PTHweight=WLRS_Sand_weight_pth}
 if (Species== "WLRS" & Terrain =="Rocky")   {PTHweight=WLRS_Rocky_weight_pth}
 
-    PTHweight<-paste0("System data/weights/",PTHweight)
+    PTHweight<-paste0(System_data,"/weights/",PTHweight)
 if (ModelCheckAlg==T) { PTHweight <- PTHweightCHECK}
     predsDir=paste0(labelInput,"\\Predict\\Preds")
 	if(dir.exists(predsDir)==T){listPredsDelete=list.files(predsDir,full.names=T,pattern= Species);unlink(listPredsDelete) }else{dir.create(predsDir)}
