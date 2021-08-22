@@ -1,10 +1,10 @@
 
                      labelInput 
                      Species
-                      batch_size_global=  500
-                      batch_size =50
-                        date1=basename(paste0(labelInput))
-						predict_dir=paste0(labelInput,"\\Predict\\Haulout")
+                     batch_size_global=  500
+                     batch_size =50
+                     date1=basename(paste0(labelInput))
+					 predict_dir=paste0(labelInput,"\\Predict\\Haulout")
 ##############################################################################################################################
 if (Species== "NFSAdult") {PTHweight=NFS_Adult_weight_pth }		
 if (Species== "SSLAdult") {PTHweight=SSL_Adult_weight_pth}	

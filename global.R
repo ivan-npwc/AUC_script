@@ -70,24 +70,12 @@ TrainFromBaseModel<<-TRUE
 
 System_data<<-listValue$System_data
 
-
-
-
-
-
-
-
-
 #SpeciesManager<<-listTMP$SpeciesManager
 #ProsessManager<<-listTMP$ProsessManager
 #listOPP1<<-listTMP$listOPP1
 
-
 listR_year=c("2016","2017","2018", "2019","2020","2021")
 listR_site=c("38", "138","116")
-
-
-
 
 
 #OPPListPred1=listTMP$OPPListPred1
@@ -113,17 +101,6 @@ if (exists("Model_base")==F) {Model_base="_"}
 
 
 ######################
-#Pth_img_error <<- paste0(labelInput,"\\Error\\Points\\Error.shp")
-#if (file.exists(Pth_img_error)==F) {Pth_img_error="_"}
-#Rookery_polygon<<-paste0(labelInput,"\\Polygons\\Rookery\\Rookery.shp")
-#Haulout_polygon<<-paste0(labelInput,"\\Polygons\\Haulout\\Haulout.shp")
-#Exlude_polygon<<-paste0(labelInput,"\\Polygons\\Exclude\\Exclude.shp")
-#AnmlsMearPth<<-paste0(labelInput,"\\Polygons\\Animal_measurments\\Animal_measurments.shp")
-
-#if (file.exists(AnmlsMearPth)==F) {AnmlsMearPth="_"}
-#if (file.exists(Rookery_polygon)==F) {Rookery_polygon="_"}
-#if (file.exists(Haulout_polygon)==F) {Haulout_polygon="_"}
-#if (file.exists(Exlude_polygon)==F) {Exlude_polygon="_"}
 Image_dir_Sin<<-"_"
 Mask_dir_Sin<<-"_"
 #################################################################
@@ -132,10 +109,6 @@ if (file.exists(pth_log)==F) {
   log1=NULL } else { log1<<-read.csv(pth_log) 
     }
 #####################################################
-#KMLdir=paste0(labelInput,"\\",basename(labelInput))
-#if (dir.exists(KMLdir)==F) {
-#Unzip_progress = F } else {Unzip_progress=T}
-
 pth_table<<-paste0(labelInput,"\\", basename(labelInput),"_table.csv")
 if (file.exists(pth_table)==F) {
   KML_progress=F } else   {KML_progress=T}
