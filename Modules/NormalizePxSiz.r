@@ -11,7 +11,7 @@
  if (Species=="NFSAdult"){NanmlsOnTiles<<-2.9
                           Up=NanmlsOnTiles*1.01
 	                      Down=NanmlsOnTiles*0.95}					 
-if (Species=="WLRS")     {NanmlsOnTiles<<-3.1    # 2.9- error 2.7 (over)  3.1 error under 30%
+if (Species=="WLRS")     {NanmlsOnTiles<<-2.4    # 2.9- error 2.7 (over)  3.1 error under 30% 3.2 error under 56%
                           Up=NanmlsOnTiles*1.01
 	                     Down=NanmlsOnTiles*0.95}
 						 
