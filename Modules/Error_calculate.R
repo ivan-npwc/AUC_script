@@ -278,27 +278,27 @@ Report<<-list(date1=basename(labelInput),
 #SpP_dataW=create_tile_polygons(labelInput)
 #          ModelPoligon1=shapefile(ModelPoligonPTH)
 #		  ObserverPoint=shapefile(ObserverPointPTH)
-          PredictPoint1=read.csv(PredictPointPTH)	
-		  
-		  proj4string(ModelPoligon1) <- crs
-		  proj4string(ObserverPoint) <- crs
-		  ##########
-coords <- data.frame(lat= PredictPoint1$lon, lon=PredictPoint1$lat)   
-data   <- data.frame(age= PredictPoint1$age)   # data
-PredictPoints <- SpatialPointsDataFrame(coords = coords,
-                                        data = data, 
-                                        proj4string = crs)
-		  ##################
-		  ObserverPoint =spTransform(ObserverPoint,crs)
-		  ModelPoligon1 = spTransform(ModelPoligon1,crs)
-		  PredictPoints = spTransform(PredictPoints,crs)
-		  #####################
-          
-          proj4string(SpP_dataW) <- crs
-   AutoModelCount =  point.in.poly(PredictPoints,ModelPoligon1) #But that's not what next9 # please write what will next
-   AutoModelCount=AutoModelCount[is.na(AutoModelCount$FID)==F,]
-   ObserverModelCount = point.in.poly(ObserverPoint,ModelPoligon1)
-   ObserverModelCount=ObserverModelCount[is.na(ObserverModelCount$FID.y)==F,]
+#          PredictPoint1=read.csv(PredictPointPTH)	
+#		  
+#		  proj4string(ModelPoligon1) <- crs
+#		  proj4string(ObserverPoint) <- crs
+#		  ##########
+#coords <- data.frame(lat= PredictPoint1$lon, lon=PredictPoint1$lat)   
+#data   <- data.frame(age= PredictPoint1$age)   # data
+#PredictPoints <- SpatialPointsDataFrame(coords = coords,
+#                                        data = data, 
+#                                        proj4string = crs)
+#		  ##################
+#		  ObserverPoint =spTransform(ObserverPoint,crs)
+#		  ModelPoligon1 = spTransform(ModelPoligon1,crs)
+#		  PredictPoints = spTransform(PredictPoints,crs)
+#		  #####################
+ #         
+#          proj4string(SpP_dataW) <- crs
+#   AutoModelCount =  point.in.poly(PredictPoints,ModelPoligon1) #But that's not what next9 # please write what will next
+#   AutoModelCount=AutoModelCount[is.na(AutoModelCount$FID)==F,]
+#   ObserverModelCount = point.in.poly(ObserverPoint,ModelPoligon1)
+#   ObserverModelCount=ObserverModelCount[is.na(ObserverModelCount$FID.y)==F,]
    
 #  ObserverCount= data.frame(point.in.poly(ObserverPoint,SpP_dataW))
 #   AutoCount= data.frame(point.in.poly(PredictPoints,SpP_dataW))
@@ -309,30 +309,30 @@ PredictPoints <- SpatialPointsDataFrame(coords = coords,
 #AnimalsDens =NULL   
 #   imgs=SpP_dataW$`rownames(srPolygonsData)`
    
-     for (i in 1:length(imgs)) {
-   img=imgs[i]
-   area=SpP_dataW[SpP_dataW$`rownames(srPolygonsData)`== img,]
-   area1=areaPolygon(area)
+ #    for (i in 1:length(imgs)) {
+#   img=imgs[i]
+#   area=SpP_dataW[SpP_dataW$`rownames(srPolygonsData)`== img,]
+#   area1=areaPolygon(area)
    
-   PredIN =  PredictPoints %over% area
-   TotalPredCount= length(PredIN[,1][is.na(PredIN[,1])==F])
+#   PredIN =  PredictPoints %over% area
+#   TotalPredCount= length(PredIN[,1][is.na(PredIN[,1])==F])
    
-   ObsIn= ObserverModelCount %over% area
-   ObsIncount= length(ObsIn[,1][is.na(ObsIn[,1])==F])
+#   ObsIn= ObserverModelCount %over% area
+#   ObsIncount= length(ObsIn[,1][is.na(ObsIn[,1])==F])
    
    
-   PredModelIN =  AutoModelCount %over% area
-   ModalPredCount= length(PredModelIN[,1][is.na(PredModelIN[,1])==F])
+#   PredModelIN =  AutoModelCount %over% area
+#   ModalPredCount= length(PredModelIN[,1][is.na(PredModelIN[,1])==F])
    
-   row1=data.frame(img=img, area=area1, ObserverCount=ObsIncount,TotalPredCount=TotalPredCount,ModalPredCount=ModalPredCount)
+#   row1=data.frame(img=img, area=area1, ObserverCount=ObsIncount,TotalPredCount=TotalPredCount,ModalPredCount=ModalPredCount)
    
-   AnimalsDens=rbind(AnimalsDens,row1)  	
-}
+#   AnimalsDens=rbind(AnimalsDens,row1)  	
+#}
 ###########################################################
-AnimalsDens$labelinput=labelinput
-write.csv(AnimalsDens,AnimalsDensPTH,row.names=F)
+#AnimalsDens$labelinput=labelinput
+#write.csv(AnimalsDens,AnimalsDensPTH,row.names=F)
 
-AnimalsDens1$Myerr=abs(AnimalsDens1$TotalPredCount - AnimalsDens1$ModalPredCount)
+#AnimalsDens1$Myerr=abs(AnimalsDens1$TotalPredCount - AnimalsDens1$ModalPredCount)
 #AnimalsDens1$diff=  as.numeric(abs(AnimalsDens1$ModalPredCount - AnimalsDens1$ObserverCount))
 #AnimalsDens1$err= AnimalsDens1$diff/AnimalsDens1$ObserverCount*100
 #AnimalsDens2=AnimalsDens1[!(AnimalsDens1$err %in% c("NaN", "Inf")),]
@@ -364,7 +364,7 @@ AnimalsDens1$Myerr=abs(AnimalsDens1$TotalPredCount - AnimalsDens1$ModalPredCount
 
 
 ############################
-}				
+#}				
 ########################################################################################################
 ###########################################################################################
 } else {print("Data insufficient to Error calculate")}
