@@ -272,12 +272,12 @@ Report<<-list(date1=basename(labelInput),
 }
 #######################################################################################################
 #########################################################################################################	
-if (Species %in% c("WLRS")  & file.exists(ModelPoligonPTH) & file.exists(ObserverPointPTH)) {
-source("Modules/01_create_tile_polygons.r")
-library(dplyr)
-SpP_dataW=create_tile_polygons(labelInput)
-          ModelPoligon1=shapefile(ModelPoligonPTH)
-		  ObserverPoint=shapefile(ObserverPointPTH)
+#if (Species %in% c("WLRS")  & file.exists(ModelPoligonPTH) & file.exists(ObserverPointPTH)) {
+#source("Modules/01_create_tile_polygons.r")
+#library(dplyr)
+#SpP_dataW=create_tile_polygons(labelInput)
+#          ModelPoligon1=shapefile(ModelPoligonPTH)
+#		  ObserverPoint=shapefile(ObserverPointPTH)
           PredictPoint1=read.csv(PredictPointPTH)	
 		  
 		  proj4string(ModelPoligon1) <- crs
@@ -306,8 +306,8 @@ PredictPoints <- SpatialPointsDataFrame(coords = coords,
    
    
    ######################################################################
-AnimalsDens =NULL   
-   imgs=SpP_dataW$`rownames(srPolygonsData)`
+#AnimalsDens =NULL   
+#   imgs=SpP_dataW$`rownames(srPolygonsData)`
    
      for (i in 1:length(imgs)) {
    img=imgs[i]
