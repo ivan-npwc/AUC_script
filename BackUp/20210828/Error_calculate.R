@@ -339,27 +339,27 @@ AnimalsDens1$Myerr=abs(AnimalsDens1$TotalPredCount - AnimalsDens1$ModalPredCount
 #AnimalsDens2$TotalPredCount=as.numeric(AnimalsDens2$TotalPredCount)
 #hist(AnimalsDens2$diff ~ AnimalsDens2$TotalPredCount)
 
-#pth="C:\\Users\\usato\\Documents\\AnimalsDens2.csv"
-#tbl=read.csv(pth)
-#tbl=as_tibble(tbl)
+pth="C:\\Users\\usato\\Documents\\AnimalsDens2.csv"
+tbl=read.csv(pth)
+tbl=as_tibble(tbl)
 
-#tbl=tbl[tbl$TotalPredCount>0,] # WE USE FOR CORRECTION ONLY TILES WITH ANIMALS
-#tbl=tbl[tbl$Myerr == 0,]      # WE USE ONLY TILES WERE MODEL COUNT=FUL COUNT # TO PREVENT SITUATION WHEN MODEL COUNT ~1, BUT TILE VERY DENSE AGREGATION
-#tbl$diff=  tbl$ModalPredCount -tbl$ObserverCount # TO FINDE DIFFERENCE
-#boxplot(tbl$diff~tbl$TotalPredCount)      # PLOT ERROR VIA DANSE
-#abline(h = 0, col = "red")
-#a=boxplot(tbl$diff~tbl$TotalPredCount,plot=F)
-#median =c(data.frame(a$stats)[3,])   # FINDE MEDIAN ERROR VIA DENSE
-#coorectTable=data.frame(TotalPredCount=as.numeric(a$names),correct=median)  # CREATE CORRECT TABLE VIA DENSE
+tbl=tbl[tbl$TotalPredCount>0,] # WE USE FOR CORRECTION ONLY TILES WITH ANIMALS
+tbl=tbl[tbl$Myerr == 0,]      # WE USE ONLY TILES WERE MODEL COUNT=FUL COUNT # TO PREVENT SITUATION WHEN MODEL COUNT ~1, BUT TILE VERY DENSE AGREGATION
+tbl$diff=  tbl$ModalPredCount -tbl$ObserverCount # TO FINDE DIFFERENCE
+boxplot(tbl$diff~tbl$TotalPredCount)      # PLOT ERROR VIA DANSE
+abline(h = 0, col = "red")
+a=boxplot(tbl$diff~tbl$TotalPredCount,plot=F)
+median =c(data.frame(a$stats)[3,])   # FINDE MEDIAN ERROR VIA DENSE
+coorectTable=data.frame(TotalPredCount=as.numeric(a$names),correct=median)  # CREATE CORRECT TABLE VIA DENSE
 
 
-#tbl=read.csv(pth)                                                         # READ ORIG FULL TABLE AGAIN
-#tbl1=left_join(tbl,coorectTable, by="TotalPredCount")
+tbl=read.csv(pth)                                                         # READ ORIG FULL TABLE AGAIN
+tbl1=left_join(tbl,coorectTable, by="TotalPredCount")
 
-#tbl1$CorrectCount = tbl1$TotalPredCount-tbl1$correct                   # ESRIMATE CORECTED COUNT ON EACH TILES BASED ON DANSE
+tbl1$CorrectCount = tbl1$TotalPredCount-tbl1$correct                   # ESRIMATE CORECTED COUNT ON EACH TILES BASED ON DANSE
 
-#sum(tbl1$CorrectCount)
-#sum(tbl1$TotalPredCount)
+sum(tbl1$CorrectCount)
+sum(tbl1$TotalPredCount)
 
 
 
