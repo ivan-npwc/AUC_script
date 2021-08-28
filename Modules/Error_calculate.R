@@ -270,7 +270,7 @@ Report<<-list(date1=basename(labelInput),
 			 
  write.csv(Compare1,save_pth_check_diff); print(Report)          
 }
-test 
+test test
 #######################################################################################################
 #########################################################################################################	
 #if (Species %in% c("WLRS")  & file.exists(ModelPoligonPTH) & file.exists(ObserverPointPTH)) {
