@@ -17,14 +17,14 @@ if (!require("rgeos")) {install.packages("rgeos"); library("rgeos")}
 if (!require("kohonen")) {install.packages("kohonen"); library("kohonen")}
 if (!require("dplyr")) {install.packages("dplyr"); library("dplyr")}
 if (!require("beepr")) {install.packages("beepr"); library("beepr")}
-if (!require("tcltk")) {install.packages("tcltk"); library("tcltk")}
-if (!require("sf")) {install.packages("sf"); library("sf")}
-if (!require("spatialEco")) {install.packages("spatialEco")}
+#if (!require("tcltk")) {install.packages("tcltk"); library("tcltk")}
+#if (!require("sf")) {install.packages("sf"); library("sf")}
+if (!require("spatialEco")) {install.packages("spatialEco");library("spatialEco")}
 if (!require("encryptr")) {install.packages("encryptr");library("encryptr")}
 if (!require("RSQLite")) {install.packages("RSQLite")}
 #if (!require("sparklyr")) {install.packages("sparklyr");library(sparklyr);spark_install(version = "2.1.0")}
 if (!require("writexl")) {install.packages("writexl")}
-# test from git
+
 #if (!requireNamespace("BiocManager", quietly = TRUE))
 #  install.packages("BiocManager")
 #  BiocManager::install("EBImage")
@@ -51,7 +51,7 @@ WLRS_Sand_weight_pth<<-  listValue$WLRS_Sand_weight_pth
 WLRS_Rocky_weight_pth<<-  listValue$WLRS_Rocky_weight_pth
 key <<-  listValue$key
 SQLite_path<<-  listValue$SQLite_path
-
+site   <<-  listValue$site
 KK_Effort <<-listValue$KK_Effort
 
 trainDir<<-listValue$trainDir

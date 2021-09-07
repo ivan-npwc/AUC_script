@@ -2,7 +2,7 @@ library(raster)
 library(spatialEco)
 
 #labelInput= "E:\\NFS_2019\\2019_138_OPP\\20190611"
-res = 0.0001 # size of model polygon
+res = 0.0002 # size of model polygon
 nP = 40
 type = "nonaligned" # type of location of polygons  (random,stratified,nonaligned,regular)
 
