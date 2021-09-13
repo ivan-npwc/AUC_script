@@ -14,6 +14,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
                  fluidRow(column(width = 11, selectInput('Bath_Process', 'Bath Process', width="1000px",multiple = T,
                                                         c("00_DataStructure"="DataStructure",
 														  "01_Count"="Count",
+														 "01_ SSL_Pup_Predict"="SSL_Pup_Predict",
 														  "02_CreateModelPolygons"="CreateModelPolygons",
 														  "03_Sort_Image_error" = "Sort_Image_error",
 														  "04_MaskAutoCreator" = "MaskAutoCreator",

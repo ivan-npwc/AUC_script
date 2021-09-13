@@ -17,11 +17,11 @@
                         HouloutPoligonDIR=paste0(labelInput,"\\Polygons\\Houlout")
                         RookeryPolygonDIR=paste0(labelInput,"\\Polygons\\Rookery")
                         ObserverPointDIR=paste0(labelInput,"\\Observer count")
-                        PredictPointPTH = paste0(labelInput,"\\Predict\\", Species,"_", basename(labelInput), ".csv")
-                        PredictPointPTH_SSL =  paste0(labelInput,"\\Predict\\",  basename(labelInput),"_",Species, "_AgeLatLon.csv")
-                        PredictPointPTH_SSL_PUP = paste0(labelInput,"\\Predict\\", "SSLPup","_", basename(labelInput), ".csv")
+                        PredictPointPTH = paste0(labelInput,"\\Predict\\", Species,"_", date1, ".csv")
+                        PredictPointPTH_SSL =  paste0(labelInput,"\\Predict\\",  date1,"_",Species, "_AgeLatLon.csv")
+                        PredictPointPTH_SSL_PUP = paste0(labelInput,"\\Predict\\", "SSLPup","_", date1, ".csv")
                         crs=CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs")
-                        AnimalsDensPTH= paste0(labelInput,"\\Predict\\",  basename(labelInput),"_",Species, "_AnimalDense.csv")
+                        AnimalsDensPTH= paste0(labelInput,"\\Predict\\",  date1,"_",Species, "_AnimalDense.csv")
 if(dir.exists(ObserverPointDIR)==F){ObserverPointDIR=paste0(labelInput,"\\Observer_count")}
 
 
@@ -35,7 +35,7 @@ ObserverPointPTH=list.files(ObserverPointDIR,full.names=T,pattern=".shp")[1]
 if (length(ModelPoligonPTH)>1 | length(HouloutPoligonPTH)>1 | length(RookeryPolygonPTH)>1 | length(ObserverPointPTH)>1) {
  stop("Only one shape file must by in one folder") }
 
-save_pth_check_diff=paste0(labelInput,"\\Predict\\Check_difference",Species,"_", basename(labelInput), ".csv")
+save_pth_check_diff=paste0(labelInput,"\\Predict\\Check_difference",Species,"_", date1, ".csv")
  
 ##################################################################################################################
 #  if (Species=="SSLPup" & file.exists(ModelPoligonPTH)==F & file.exists(ObserverPointPTH)==T  & file.exists(PredictPointPTH)) {
@@ -84,37 +84,47 @@ save_pth_check_diff=paste0(labelInput,"\\Predict\\Check_difference",Species,"_",
 	#				}
 ##########################################################################################################
  if (Species=="SSLAdult" & file.exists(ModelPoligonPTH) & file.exists(ObserverPointPTH)) {
+ 
          ObserverPoint= shapefile(ObserverPointPTH)
 		 
-      
 	   ObserPTHD=paste0(labelInput,"\\Observer count"); ObserPTH=list.files(ObserPTHD, pattern=".shp", full.names=T);observC=data.frame(shapefile(ObserPTH))
       PredPTHh=paste0(labelInput,"\\Predict\\",date1,"_SSLAdult_HAULOUT.csv")
       PredPTHr=paste0(labelInput,"\\Predict\\",date1,"_SSLAdult_ROOKERY.csv")
-	  
+	if (file.exists(PredPTHr)){
 	 PredRook=read.csv(PredPTHr)
      PredHaul=read.csv(PredPTHh)
      PredictPoint1=rbind(PredRook,PredHaul)
-		  
+	} else {
+	PredictPoint1=read.csv(PredictPointPTH_SSL)
+	}	  
+	
+	PredictPoint1$age=gsub("AF","F",PredictPoint1$age)
+    PredictPoint1$age=gsub("Sa","SA",PredictPoint1$age)
+	PredictPoint1$age=gsub("An","AN",PredictPoint1$age)
+	
+	
+	
 		  
 		  ModelPoligon1=shapefile(ModelPoligonPTH)
 		if(file.exists(PredictPointPTH_SSL_PUP))  {PredictPointSSLPup=read.csv(PredictPointPTH_SSL_PUP);PredictPoint1=rbind(PredictPoint1,PredictPointSSLPup)}
 		 
-		 
 		  proj4string(ModelPoligon1) <- crs
 		  proj4string(ObserverPoint) <- crs
-		  
-		  ObserverPoint0=   point.in.poly(ObserverPoint,ModelPoligon1)
-		 ObserverPoint0=as.data.frame(ObserverPoint0)
-		 if (length(names(ObserverPoint0)) !=6){ ObserverPoint0=ObserverPoint0[is.na(ObserverPoint0$LAYER) == F,]
-		ObserverPoint1=data.frame(lon=ObserverPoint0$coords.x1, lat= ObserverPoint0$coords.x2,   age= as.factor(ObserverPoint0$LAYER)) }
-		if (length(names(ObserverPoint0)) ==6){ ObserverPoint0=ObserverPoint0[is.na(ObserverPoint0$LAYER.x) == F,]
-		ObserverPoint1=data.frame(lon=ObserverPoint0$coords.x1, lat= ObserverPoint0$coords.x2,   age= as.factor(ObserverPoint0$LAYER.x))}
+		  pts = data.frame(ObserverPoint[!is.na(over(ObserverPoint,as(ModelPoligon1,"SpatialPolygons"))),])
+		 
+		ObserverPoint1=data.frame(lon=pts$coords.x1, lat= pts$coords.x2,   age= as.factor(pts$LAYER))
+		
         
 										
    
- #  ObserverPoint1$age=gsub("Sa","Bch",ObserverPoint1$age)
-  # ObserverPoint1$age=gsub("J","Bch",ObserverPoint1$age)
+   ObserverPoint1$age=gsub("AF","F",ObserverPoint1$age)
+   ObserverPoint1$age=gsub("Sa","SA",ObserverPoint1$age)
+   ObserverPoint1$age=gsub("An","AN",ObserverPoint1$age)
    ObserverPoint1$age=gsub("TN","TF",ObserverPoint1$age)
+   
+   if(file.exists(PredictPointPTH_SSL_PUP)==F){ObserverPoint1=ObserverPoint1[ObserverPoint1$age != "P",] }
+   
+   
    ObserverPoint2=ObserverPoint1 %>% group_by(age) %>% summarise(ObserverCount=n())
    
  #  ObserverPoint2=ObserverPoint2[ObserverPoint2$age !="P",]

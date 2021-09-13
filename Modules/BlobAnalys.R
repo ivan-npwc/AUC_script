@@ -2,7 +2,7 @@ BlobAnalis=function (labelInput1=labelInput) {
 
      predsDir=paste0(labelInput1,"\\Predict\\Preds")
      listPreds=list.files(predsDir,full.names=T,pattern=Species)  
-     date1=basename(labelInput1) 
+     date1=substr(basename(labelInput),1,15)
      resultBlob=NULL
 	 
 	 

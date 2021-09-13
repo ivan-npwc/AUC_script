@@ -1,12 +1,13 @@
 ###########################################################################
                   
                     labelInput
+					date1=substr(basename(labelInput),1,15)
                     Species
                     deletePreds=F
-					PthTable=paste0(labelInput,"\\", basename(labelInput), "_table.csv")
-					readPth=paste0(labelInput, "\\Predict\\", Species,"_BlobTable_",basename(labelInput), ".csv" )
+					PthTable=paste0(labelInput,"\\", basename(date1), "_table.csv")
+					readPth=paste0(labelInput, "\\Predict\\", Species,"_BlobTable_",basename(date1), ".csv" )
 					 crs    <- "+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs"
-					savePth<<-paste0(labelInput, "\\Predict\\", Species,"_BlobTable_GEO_",basename(labelInput), ".csv" )
+					savePth<<-paste0(labelInput, "\\Predict\\", Species,"_BlobTable_GEO_",basename(date1), ".csv" )
 					DistanceCalculate = F
 					
 					

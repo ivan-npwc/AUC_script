@@ -4,15 +4,16 @@ source("Modules/KMLwrite_function.r")
 				#	if (Species=="WLRS"){clastering=T}		 
 							 minDistance =0.2 # min distance 0.1 m minDistance
 							 labelInput
+							 date1=substr(basename(labelInput),1,15)
 					         Species
                              crs    <- "+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs"
-							 pathTablePoints=paste0(labelInput, "\\Predict\\",Species, "_BlobTable_GEO_",basename(labelInput), ".csv")
+							 pathTablePoints=paste0(labelInput, "\\Predict\\",Species, "_BlobTable_GEO_",date1, ".csv")
 							 Haulout_polygonDir=paste0(labelInput, "\\Polygons\\Haulout")
 							 Exlude_polygonDir=paste0(labelInput, "\\Polygons\\Exclude")
 							 Rookery_polygonDir=paste0(labelInput, "\\Polygons\\Rookery")
 					if (ModelCheckAlg==F){
-					kmlPathSave <<- paste0(labelInput,"\\Predict\\",Species, "_", basename(labelInput), ".kml")
-                    csvPathSave= paste0(labelInput,"\\Predict\\",Species,"_", basename(labelInput), ".csv")
+					kmlPathSave <<- paste0(labelInput,"\\Predict\\",Species, "_", date1, ".kml")
+                    csvPathSave= paste0(labelInput,"\\Predict\\",Species,"_", date1, ".csv")
 					}	
                   if (ModelCheckAlg==T){
 					kmlPathSave <<- CheckModelkmlPathSave
