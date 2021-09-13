@@ -4,7 +4,7 @@
 
    labelInput
    Species
-   date1<<-substr(basename(labelInput),1,15)
+
 
    ModelPoligonPTH=NULL
    HouloutPoligonPTH=NULL
@@ -83,19 +83,9 @@ save_pth_check_diff=paste0(labelInput,"\\Predict\\Check_difference",Species,"_",
 	#				TottalErrorPercent= TottalErrorPercent)            
 	#				}
 ##########################################################################################################
- if (Species=="SSLAdult" & file.exists(ModelPoligonPTH) & file.exists(ObserverPointPTH)) {
+ if (Species=="SSLAdult" & file.exists(ModelPoligonPTH) & file.exists(ObserverPointPTH)  & file.exists(PredictPointPTH_SSL)) {
          ObserverPoint= shapefile(ObserverPointPTH)
-		 
-      
-	   ObserPTHD=paste0(labelInput,"\\Observer count"); ObserPTH=list.files(ObserPTHD, pattern=".shp", full.names=T);observC=data.frame(shapefile(ObserPTH))
-      PredPTHh=paste0(labelInput,"\\Predict\\",date1,"_SSLAdult_HAULOUT.csv")
-      PredPTHr=paste0(labelInput,"\\Predict\\",date1,"_SSLAdult_ROOKERY.csv")
-	  
-	 PredRook=read.csv(PredPTHr)
-     PredHaul=read.csv(PredPTHh)
-     PredictPoint1=rbind(PredRook,PredHaul)
-		  
-		  
+          PredictPoint1=read.csv(PredictPointPTH_SSL)	
 		  ModelPoligon1=shapefile(ModelPoligonPTH)
 		if(file.exists(PredictPointPTH_SSL_PUP))  {PredictPointSSLPup=read.csv(PredictPointPTH_SSL_PUP);PredictPoint1=rbind(PredictPoint1,PredictPointSSLPup)}
 		 
@@ -136,24 +126,24 @@ coords <- data.frame(lat= PredictPoint1$lon, lon=PredictPoint1$lat)
     PredictPoint5=data.frame(age=PredictPoint4$age,lat=PredictPoint4$coords.x2,lon=PredictPoint4$coords.x1)  
     PredictPoint6=PredictPoint5 %>% group_by(age) %>% summarise(AutoCount=n())
 	Compare1=merge(ObserverPoint2,PredictPoint6,by="age",all=T)
-	Compare1$date=date1
-	Compare1$species=Species
+	Compare1$date=basename(labelInput)
+	
 	 
 			 TottalErrorIndivid=abs(sum(Compare1$ObserverCount,na.rm = T)- sum(Compare1$AutoCount,na.rm = T))
 			 TottalErrorPercent=TottalErrorIndivid/sum(Compare1$ObserverCount,na.rm = T)*100
 	
 	
 
-Report=list(date1=date1,
+Report=list(date1=basename(labelInput),
              Species=Species,
               Compare1=Compare1,
 			  TottalErrorIndivid=TottalErrorIndivid,
 			  TottalErrorPercent=TottalErrorPercent
 			 ) 
 print(Report)
-
-
-write.csv(Compare1,save_pth_check_diff,row.names=F)			 
+Compare1$date=basename(labelInput)
+Compare1$species=Species
+write.csv(Compare1,save_pth_check_diff)			 
 					}			
 ##############################################################################################################		
  if (Species=="NFSAdult" & file.exists(ModelPoligonPTH) & file.exists(ObserverPointPTH)) {		
@@ -280,7 +270,7 @@ Report<<-list(date1=basename(labelInput),
 			 
  write.csv(Compare1,save_pth_check_diff); print(Report)          
 }
-
+test test
 #######################################################################################################
 #########################################################################################################	
 #if (Species %in% c("WLRS")  & file.exists(ModelPoligonPTH) & file.exists(ObserverPointPTH)) {

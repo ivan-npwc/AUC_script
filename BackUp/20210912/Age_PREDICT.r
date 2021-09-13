@@ -8,9 +8,9 @@ Age_Pred_Fun=function(
 	trgt_size = 256,
 	type,
 	check=F,
-	modelBASEAgePTH <<-       paste0(System_data,"/weights/SSL AGE/ROOKERY SSLAdult_Feb 19  2021_Val_0.89_epoch_01.h5"),
-	RookerytWeightPTH<<-    paste0(System_data,"/weights/SSL AGE/SSLageROOKERYweight"),
-	HauloutWeightPTH<<-     paste0(System_data,"/weights/SSL AGE/SSLageHAULOUTweight" )) {	
+	modelBASEAgePTH=       paste0(System_data,"/weights/SSL AGE/ROOKERY SSLAdult_Feb 19  2021_Val_0.89_epoch_01.h5"),
+	RookerytWeightPTH =    paste0(System_data,"/weights/SSL AGE/SSLageROOKERYweight"),
+	HauloutWeightPTH =    paste0(System_data,"/weights/SSL AGE/SSLageHAULOUTweight" )) {	
 	#"C:\\SSL_DB\\AUC_script\\System data\\weights\\SSL AGE\\SSLageHAULOUTweight"
 	
 	library(abind)
