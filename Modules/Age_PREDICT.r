@@ -21,7 +21,7 @@ Age_Pred_Fun=function(
 	library(EBImage)
     library(keras)
 	library(magick) 
-	
+	date1=substr(basename(labelInput),1,15)
 	if(exists("modelAge")==F){modelAge=load_model_hdf5(modelBASEAgePTH)}
 	
 if (type=="Rookery"){
@@ -32,9 +32,9 @@ if (type=="Rookery"){
 		  set_weights(modelAge,RookerytWeight)
 	      Age_Name= c("TF","F", "J")      		
           pth<<- paste0(labelInput,"\\Predict\\Age_predict\\Rookery")
-	      PthTblAgeRef=paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"AgeRef.csv")
-	      PTH_TableGeoAge =paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"_ROOKERY.csv")
-          kmlPathSave=paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"_ROOKERY.kml")
+	      PthTblAgeRef=paste0(labelInput,"\\Predict\\",date1,"_", Species,"AgeRef.csv")
+	      PTH_TableGeoAge =paste0(labelInput,"\\Predict\\",date1,"_", Species,"_ROOKERY.csv")
+          kmlPathSave=paste0(labelInput,"\\Predict\\",date1,"_", Species,"_ROOKERY.kml")
 	     # ProbAge_PTH=paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"_ProbAge.csv")      
   }
 ############################################################################
@@ -46,9 +46,9 @@ if (type=="Haulout"){
 		  set_weights(modelAge,HauloutWeight)
 	      Age_Name= c("An","J", "Sa")      		
           pth<<- paste0(labelInput,"\\Predict\\Age_predict\\Haulout")
-	      PthTblAgeRef=paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"AgeRef.csv")
-	      PTH_TableGeoAge =paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"_HAULOUT.csv")
-          kmlPathSave=paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"_HAULOUT.kml")
+	      PthTblAgeRef=paste0(labelInput,"\\Predict\\",date1,"_", Species,"AgeRef.csv")
+	      PTH_TableGeoAge =paste0(labelInput,"\\Predict\\",date1,"_", Species,"_HAULOUT.csv")
+          kmlPathSave=paste0(labelInput,"\\Predict\\",date1,"_", Species,"_HAULOUT.kml")
 	     # ProbAge_PTH=paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"_ProbAge.csv")    
   }
 ############################################################################
