@@ -1,6 +1,5 @@
 
 labelInput
-date1=substr(basename(labelInput),1,15)
 Species
 Type= "Predict"  #"Train"
 
@@ -20,14 +19,14 @@ Type= "Predict"  #"Train"
 	})
   registerDoParallel(cl)
   
-    PthTblAgeRef=paste0(labelInput,"\\Predict\\",date1,"_", Species,"AgeRef.csv")
-    Pth_GeoInfoImg=paste0(labelInput,"\\", date1,"_table.csv")
-	PthPredictCount=paste0(labelInput,"\\Predict\\",Species,"_", date1,".csv")
+    PthTblAgeRef=paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"AgeRef.csv")
+    Pth_GeoInfoImg=paste0(labelInput,"\\", basename(labelInput),"_table.csv")
+	PthPredictCount=paste0(labelInput,"\\Predict\\",Species,"_", basename(labelInput),".csv")
     HouloutFolder=paste0(labelInput,"\\Predict\\Haulout");listImgs=list.files(HouloutFolder, full.names=T)
-	ageFolder=paste0(labelInput,"\\Predict\\Age_predict");unlink(ageFolder,recursive=T)
-   dir.create(ageFolder,showWarnings = F)
-   dir.create(paste0(ageFolder,"\\Rookery"),showWarnings = F)
-   dir.create(paste0(ageFolder,"\\Haulout"),showWarnings = F)
+	
+   dir.create(paste0(labelInput,"\\Predict\\Age_predict"),showWarnings = F)
+   dir.create(paste0(labelInput,"\\Predict\\Age_predict\\Rookery"),showWarnings = F)
+   dir.create(paste0(labelInput,"\\Predict\\Age_predict\\Haulout"),showWarnings = F)
 
 	
 	DirRPol=paste0(labelInput,"\\Polygons\\Rookery");PthPolR=list.files(DirRPol,full.names=T, pattern=".shp")
@@ -98,9 +97,9 @@ TblAgeRef=PrdLocPnts
 TblAgeRef$pth_img=as.character(TblAgeRef$pth_img)
  for (i in 1:length(TblAgeRef[,1])) {
  if (TblAgeRef$Rookery[i]=="Rookery"){
- TblAgeRef$pth_save_img[i]=paste0(ageFolder,"\\Rookery\\",i,"_",basename(TblAgeRef$pth_img[i]))}
+ TblAgeRef$pth_save_img[i]=paste0(labelInput,"\\Predict\\Age_predict\\Rookery\\",i,"_",basename(TblAgeRef$pth_img[i]))}
  if (TblAgeRef$Rookery[i]=="Haulout"){
- TblAgeRef$pth_save_img[i]=paste0(ageFolder,"\\Haulout\\",i,"_",basename(TblAgeRef$pth_img[i]))}
+ TblAgeRef$pth_save_img[i]=paste0(labelInput,"\\Predict\\Age_predict\\Haulout\\",i,"_",basename(TblAgeRef$pth_img[i]))}
  }
  write.csv(TblAgeRef,PthTblAgeRef,row.names=F)
 ####################################################################   CLIPS
