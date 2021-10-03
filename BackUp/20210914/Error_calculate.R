@@ -106,7 +106,7 @@ save_pth_check_diff=paste0(labelInput,"\\Predict\\Check_difference",Species,"_",
 	
 		  
 		  ModelPoligon1=shapefile(ModelPoligonPTH)
-		if(file.exists(PredictPointPTH_SSL_PUP))  {PredictPointSSLPup=read.csv(PredictPointPTH_SSL_PUP);PredictPointSSLPup$area=NULL; PredictPoint1=rbind(PredictPoint1,PredictPointSSLPup)}
+		if(file.exists(PredictPointPTH_SSL_PUP))  {PredictPointSSLPup=read.csv(PredictPointPTH_SSL_PUP);PredictPoint1=rbind(PredictPoint1,PredictPointSSLPup)}
 		 
 		  proj4string(ModelPoligon1) <- crs
 		  proj4string(ObserverPoint) <- crs
