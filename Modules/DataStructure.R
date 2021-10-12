@@ -46,8 +46,8 @@
 #  }
  # ErrDir=paste0(labelInput,"\\Error");dir.create(ErrDir);PointsErrDir=paste0(ErrDir,"\\Points");dir.create(PointsErrDir)
    
-  if (Species=="SSLAdult") {file.copy(ModelPOlSSL138,ModelPolDir)
-                            file.copy(SSLageCategory,paste0(ObserverCountDir,"\\",NewNameAge))
+  if (Species=="SSLAdult") {#file.copy(ModelPOlSSL138,ModelPolDir)
+                            #file.copy(SSLageCategory,paste0(ObserverCountDir,"\\",NewNameAge))
 							
 							ErrDirAdult=paste0(labelInput,"\\Error_SSLAdult");dir.create(ErrDirAdult)
                             ErrDirPup=paste0(labelInput,"\\Error_SSLPup");dir.create(ErrDirPup)

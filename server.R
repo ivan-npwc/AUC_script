@@ -42,21 +42,20 @@ function(input, output, session) {
   	OPPListPred1<<-input$OPPListPred
   	NanmlsOnTiles<<-input$NanmlsOnTiles
 	Terrain<<-input$Terrain
+	Count_type<<-input$type
 	##########
    if (OPPListPred1=="All") {OPPListPred1=list.files(as.character(unique(listValue$pthOPP)))}
    ForLoop_OPPListPred1 <<- OPPListPred1
-
      source("Modules/ListTMPUpdate.r")
-
 	for (d in 1:length(ForLoop_OPPListPred1)) {
-
 	       dayInProgress <<-ForLoop_OPPListPred1[d]
 	       labelInput <<-   paste0(unique(listValue$pthOPP),"\\",dayInProgress)
 	##########
-	       Check1=dir.exists(paste0(labelInput,"\\Predict"));
-	       Check2=dir.exists(paste0(labelInput,"\\Observer count"))	       
-         Check3=paste0(labelInput,"\\",basename(labelInput),".kmz")
-    if (Check1 & Check2 & Check3 == F)  {SubFolds<<-list.dirs(labelInput, full.names=T,recursive=F)} else {
+	       
+	check1=file.exists(paste0(labelInput,"\\",substr(basename(labelInput),1,15),".files"))
+	check2=	"Save" %in% BatchProcessVector
+		 
+    if (check1==F & check2==F)  {SubFolds<<-list.dirs(labelInput, full.names=T,recursive=F)} else {
     SubFolds<<-labelInput} 
 #############  
 		   
