@@ -1,4 +1,3 @@
-if (!require("Rcpp")) {install.packages("Rcpp"); library("Rcpp")}
 if (!require("DT")) {install.packages("DT"); library("DT")}
 if (!require("keras")) {install.packages("keras"); library("keras")}
 if (!require("XML")) {install.packages("XML"); library("XML")}
@@ -21,7 +20,7 @@ if (!require("beepr")) {install.packages("beepr"); library("beepr")}
 #if (!require("tcltk")) {install.packages("tcltk"); library("tcltk")}
 #if (!require("sf")) {install.packages("sf"); library("sf")}
 if (!require("spatialEco")) {install.packages("spatialEco");library("spatialEco")}
-#if (!require("encryptr")) {install.packages("encryptr");library("encryptr")}
+if (!require("encryptr")) {install.packages("encryptr");library("encryptr")}
 if (!require("RSQLite")) {install.packages("RSQLite")}
 #if (!require("sparklyr")) {install.packages("sparklyr");library(sparklyr);spark_install(version = "2.1.0")}
 if (!require("writexl")) {install.packages("writexl")}

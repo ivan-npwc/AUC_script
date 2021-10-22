@@ -96,7 +96,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
                 
                 )),
 #######################################################################################################
-tabPanel("Settings",
+tabPanel("Setting",
          
 		 
 			 
