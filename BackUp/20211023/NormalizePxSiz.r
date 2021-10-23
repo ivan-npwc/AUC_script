@@ -15,9 +15,7 @@ if (Species=="WLRS")     {NanmlsOnTiles<<-2.5    # 2.9- error 2.7 (over)  3.1 er
                           Up=NanmlsOnTiles*1.01
 	                     Down=NanmlsOnTiles*0.95}
 						 
-if (Species=="LRG")     {NanmlsOnTiles<<-1.65    # 
-                          Up=NanmlsOnTiles*1.01
-	                     Down=NanmlsOnTiles*0.95}						 
+						 
 						 
 
 	

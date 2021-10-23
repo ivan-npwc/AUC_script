@@ -50,7 +50,6 @@ SSL_Age_Weight_Rookery<<-  listValue$SSL_Age_Weight_Rookery
 Weight<<- listValue$Weight
 WLRS_Sand_weight_pth<<-  listValue$WLRS_Sand_weight_pth
 WLRS_Rocky_weight_pth<<-  listValue$WLRS_Rocky_weight_pth
-LRG_pth<<-listValue$LRG_pth
 key <<-  listValue$key
 SQLite_path<<-  listValue$SQLite_path
 site   <<-  listValue$site
@@ -105,7 +104,6 @@ if (exists("Model_base")==F) {Model_base="_"}
 ######################
 Image_dir_Sin<<-"_"
 Mask_dir_Sin<<-"_"
-UseAllHauloutImages<<-FALSE
 #################################################################
 pth_log<<-paste0(labelInput,"\\",basename(labelInput), "-Log.csv")
 if (file.exists(pth_log)==F) {

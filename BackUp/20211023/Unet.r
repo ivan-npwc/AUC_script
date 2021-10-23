@@ -10,10 +10,8 @@ if (Species== "NFSAdult") {PTHweight=NFS_Adult_weight_pth }
 if (Species== "SSLAdult") {PTHweight=SSL_Adult_weight_pth}	
 if (Species== "NFSPup") { PTHweight=NFS_Pup_weight_pth }
 if (Species== "SSLPup") { PTHweight=SSL_Pup_weight_pth}
-if (Species== "LRG") {PTHweight=LRG_pth}
 if (Species== "WLRS" & Terrain =="Sand")   {PTHweight=WLRS_Sand_weight_pth}
 if (Species== "WLRS" & Terrain =="Rocky")   {PTHweight=WLRS_Rocky_weight_pth}
-
 
     PTHweight<-paste0(System_data,"/weights/",PTHweight)
 if (ModelCheckAlg==T) { PTHweight <- PTHweightCHECK}

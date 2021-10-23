@@ -34,7 +34,6 @@ source("Modules/KMLwrite_function.r")
  if (Species =="NFSPup") {BlobFemaleLimit=0}
  if (Species =="WLRS") {BlobFemaleLimit=40}
  if (Species == "SSLPup") {BlobFemaleLimit=0}
-  if (Species == "LRG") {BlobFemaleLimit=0}
 ####################################################################################################
 PointsHoulout2=NULL
 RookeryPoints=NULL
@@ -113,7 +112,7 @@ RP=Pointsfilter(tble=dat3,pthPolygon=Rookery_polygon)
 	 }
 }
   #######################################################################################################################     HAULOUT NFS SSL WLRS adult
- if (length(Haulout_polygon) != 0 & Species %in% c("NFSAdult","SSLAdult","WLRS","LRG")) { 
+ if (length(Haulout_polygon) != 0 & Species %in% c("NFSAdult","SSLAdult","WLRS")) { 
    PH1=Pointsfilter(tble=dat3,pthPolygon=Haulout_polygon) 
     if (length(Rookery_polygon) != 0) {
 	RP3= shapefile(Rookery_polygon)  

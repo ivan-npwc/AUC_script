@@ -1,7 +1,10 @@
-System_data
-labelInput
-Species
- 
+#DataStructure=function (labelInput=labelInput,
+#                        species1=Species,
+#                        StartSeason=T) {
+  
+ # labelInput<<-"D:\\NFS_2019\\2019_138_OPP_pups\\20190803\\20190803_01"
+ # species1<<-Species
+  
   library(raster)
   
   NFSageCategoryDir= paste0(System_data,"/AgeCategory/NFS")	#"G:\\My Drive\\AUC_script\\System data\\AgeCategory\\NFS" #

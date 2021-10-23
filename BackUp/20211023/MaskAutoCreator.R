@@ -2,34 +2,23 @@ library(EBImage)
 
 Species
 labelInput
-UseAllHauloutImages
 TimeOn1Anmls=7 #, 3 seconds for painting and 3 seconds for check
 limitAutoMask=25 #no auto mask for more then 25 Animals
-
-
+#MaskAutoCreator=function (labelInput1=labelInput) {
+#"E:\\SSL_DB\\2020_138_OPP\\20200615"                        
+  
   predsDir=paste0(labelInput,"\\Predict\\Preds")
   listPreds=list.files(predsDir,full.names=T,pattern=Species) 
        if (length(listPreds)==0){stop(paste0("No prediction found for ", Species))} 
-  date1=   substr(basename(labelInput),1,15)
-
-  if (UseAllHauloutImages==F){
+  date1=basename(labelInput) 
   ImgDir=paste0(labelInput,"\\Error_",Species,"\\Image")
   MskDir=paste0(labelInput,"\\Error_",Species,"\\Mask")
  
-  } 
-  if (UseAllHauloutImages==T){ 
-  HauloutDir=paste0(labelInput,"\\Predict\\Haulout")
-  listImgsHaul=list.files(HauloutDir,full.names=T)
-  dir.create(paste0(labelInput,"\\Error_",Species))
-  ImgDir=paste0(labelInput,"\\Error_",Species,"\\Image"); dir.create(ImgDir)
-  MskDir=paste0(labelInput,"\\Error_",Species,"\\Mask"); dir.create(MskDir)
- file.copy(listImgsHaul,ImgDir)
- } 
- 
   ListImgs=list.files(ImgDir)
+  
   for (f in 1:length(listPreds)) {
     
-    cl <- makePSOCKcluster(detectCores (logical=F)) 
+    cl <- makePSOCKcluster(detectCores ()-1) 
     clusterEvalQ(cl, {library(EBImage)})
     registerDoParallel(cl)
     #   Species=strsplit(basename(listPreds[f]),split = "_")[[1]][2]
@@ -78,7 +67,7 @@ limitAutoMask=25 #no auto mask for more then 25 Animals
 	 
 	library(dplyr)
 
-
+date1=basename(labelInput) 
 DirImgs=paste0(labelInput,"\\Error_",Species,"\\Image")
 pth_resultBlob <- paste0(labelInput,"\\Predict\\",Species,"_BlobTable_", date1, ".csv")
 
@@ -99,6 +88,7 @@ GaremMsk=gsub("jpg","png",GaremMsk)
 GaremMsk1=paste0(labelInput,"\\Error_",Species,"\\Mask\\", Species,"_",GaremMsk)
 #unlink(GaremMsk1)
 TimeGeneral=round(sum(SORTresultBlob1$time1)/60/60)
+
 print(paste0("Time for masking ", TimeGeneral," hours"))
 
    

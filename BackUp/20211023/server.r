@@ -43,7 +43,6 @@ function(input, output, session) {
   	NanmlsOnTiles<<-input$NanmlsOnTiles
 	Terrain<<-input$Terrain
 	Count_type<<-input$type
-	UseAllHauloutImages  <<- input$UseAllHauloutImages
 	##########
    if (OPPListPred1=="All") {OPPListPred1=list.files(as.character(unique(listValue$pthOPP)))}
    ForLoop_OPPListPred1 <<- OPPListPred1
@@ -247,16 +246,6 @@ withProgress(message = paste0("Doing  ",labelInput), value = d , {
     updateActionButton (session,'System_data',   label= paste0("System_data:  ",System_data))
   }) 
   ####################################################################################### 
-       re26 = observeEvent( input$LRG_pth, {
-    LRG_pth<<-file.choose()
-    source("Modules/ListUniqueUpdate.r")
-    updateActionButton (session,'LRG_pth',   label= paste0("LRG_pth:  ",LRG_pth))
-  }) 
-#################################
-
-
-
-
 
   observeEvent(input$Unet_train, {
     Split1<<-input$Split

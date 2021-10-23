@@ -67,7 +67,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
                                                                  ))),
 														#############
 			fluidRow(column(3, conditionalPanel("input.Bath_Process=='MaskAutoCreator'",
-                                    checkboxInput("UseAllHauloutImages", "Use All Haulout Images", value=FALSE)
+                                     selectInput("typeMAC", "typeMAC", c("1","2","3"), multiple=F)
                                                                  ))),
 														#############
 			fluidRow(column(width = 4, selectInput('site', 'site', width="1000px",multiple = F,
@@ -79,8 +79,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
                                                            "SSL_Adult"="SSLAdult",
                                                            "NFS_Pup"="NFSPup",
                                                            "SSL_Pup"="SSLPup",
-														   "WLRS"="WLRS",
-														   "LRG"="LRG"),
+														   "WLRS"="WLRS"),
 													          selected=listTMP$Species
                  )),
 				 ##################
@@ -119,8 +118,6 @@ tabPanel("Settings",
 		 hr(),
 		     fluidRow(column(width = 12,actionLink('SSL_Age_pth',label= paste0("SSL_Age_pth:  ", SSL_Age_pth), style = "font-size:12px;"))),
          hr(),
-		  fluidRow(column(width = 12,actionLink('LRG_pth',label= paste0("LARGA:  ", LRG_pth), style = "font-size:12px;"))),
-		  hr(),
              fluidRow(column(width = 12,actionLink('SQLite_path',label= paste0("SQLite_path:  ", SQLite_path), style = "font-size:12px;"))),
 		 hr(),   
 		    fluidRow(column(width = 12,actionLink('KK_Effort',label= paste0("KK_Effort:  ", KK_Effort), style = "font-size:12px;"))),

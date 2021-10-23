@@ -8,7 +8,6 @@ listUniq <- list(
                   SSL_Adult_weight_pth=SSL_Adult_weight_pth,
                   SSL_Pup_weight_pth=SSL_Pup_weight_pth,
 				  SSL_Age_Weight_Rookery=SSL_Age_Weight_Rookery,
-				  LRG_pth=LRG_pth,
 				  Weight=Weight,
 				  
 				  WLRS_Rocky_weight_pth=WLRS_Rocky_weight_pth,
