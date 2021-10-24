@@ -60,7 +60,8 @@ limitAutoMask=25 #no auto mask for more then 25 Animals
       nmask1 <- fillHull(nmask)
       nmask2 = opening(nmask1, makeBrush(7,shape='disc') ) # shape='Gaussian', sigma=50
       
-	  eierode = erode(nmask2, makeBrush(3, shape='diamond'))
+
+	    if (Species != "LRG") { nmask2 = erode(nmask2, makeBrush(3, shape='diamond'))}
 	#  dilate=dilate(eierode, makeBrush(2, shape='diamond'))
 	  
       nmask3 = fillHull(eierode)	
