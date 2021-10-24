@@ -1,5 +1,5 @@
+BlobAnalis=function (labelInput1=labelInput) {
 
-     Species
      predsDir=paste0(labelInput1,"\\Predict\\Preds")
      listPreds=list.files(predsDir,full.names=T,pattern=Species)  
      date1=substr(basename(labelInput),1,15)
@@ -40,11 +40,8 @@ resultBlob_tmp <- foreach(i = 1:length(listImageBl),.combine=rbind) %dopar% {
        nmask = thresh(img, 18, 18, 0.009)  
        nmask1 <- fillHull(nmask)
        nmask2 = opening(nmask1, makeBrush(7,shape='disc') ) # shape='Gaussian', sigma=50
-	   
-	  if (Species != "LRG") { nmask2 = erode(nmask2, makeBrush(3, shape='diamond'))}
-	   
-       nmask3 = fillHull(nmask2)
-	   
+	   eierode = erode(nmask2, makeBrush(3, shape='diamond'))
+       nmask3 = fillHull(eierode)
        nmask4 = bwlabel(nmask3)
          if (max(nmask4)!=0) {   
             fts = computeFeatures.moment(nmask4)  # coordinat
@@ -66,3 +63,5 @@ if (is.null(resultBlob_tmp)==F){resultBlob=rbind(resultBlob,resultBlob_tmp)}
 		   write.csv(resultBlob,pth_resultBlob,row.names = F)
 		  
       
+}
+BlobAnalis()
