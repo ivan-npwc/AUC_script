@@ -248,7 +248,7 @@ withProgress(message = paste0("Doing  ",labelInput), value = d , {
   }) 
   ####################################################################################### 
        re26 = observeEvent( input$LRG_pth, {
-    LRG_pth<<-basename(file.choose())
+    LRG_pth<<-file.choose()
     source("Modules/ListUniqueUpdate.r")
     updateActionButton (session,'LRG_pth',   label= paste0("LRG_pth:  ",LRG_pth))
   }) 

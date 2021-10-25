@@ -66,7 +66,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
                                      selectInput("type", "type", c("manual_count_full","auto_count_full","manual_count_model"), multiple=F)
                                                                  ))),
 														#############
-			fluidRow(column(3, conditionalPanel("input.Species=='LRG'",
+			fluidRow(column(3, conditionalPanel("input.Bath_Process=='MaskAutoCreator'",
                                     checkboxInput("UseAllHauloutImages", "Use All Haulout Images", value=FALSE)
                                                                  ))),
 														#############
