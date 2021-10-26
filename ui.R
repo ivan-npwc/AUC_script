@@ -80,7 +80,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
                                                            "NFS_Pup"="NFSPup",
                                                            "SSL_Pup"="SSLPup",
 														   "WLRS"="WLRS",
-														   "LRG"="LRG"),
+														   "LARGHA"="LRG"),
 													          selected=listTMP$Species
                  )),
 				 ##################
@@ -119,7 +119,7 @@ tabPanel("Settings",
 		 hr(),
 		     fluidRow(column(width = 12,actionLink('SSL_Age_pth',label= paste0("SSL_Age_pth:  ", SSL_Age_pth), style = "font-size:12px;"))),
          hr(),
-		  fluidRow(column(width = 12,actionLink('LRG_pth',label= paste0("LARGA:  ", LRG_pth), style = "font-size:12px;"))),
+		  fluidRow(column(width = 12,actionLink('LRG_pth',label= paste0("LARGHA:  ", LRG_pth), style = "font-size:12px;"))),
 		  hr(),
              fluidRow(column(width = 12,actionLink('SQLite_path',label= paste0("SQLite_path:  ", SQLite_path), style = "font-size:12px;"))),
 		 hr(),   

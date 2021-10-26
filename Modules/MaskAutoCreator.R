@@ -64,7 +64,7 @@ limitAutoMask=25 #no auto mask for more then 25 Animals
 	    if (Species != "LRG") { nmask2 = erode(nmask2, makeBrush(3, shape='diamond'))}
 	#  dilate=dilate(eierode, makeBrush(2, shape='diamond'))
 	  
-      nmask3 = fillHull(eierode)	
+      nmask3 = fillHull(nmask2)	
       nmask4 = bwlabel(nmask3)
 	  nmask5=resize(nmask4,1024,1024)
 	  MaskPth=paste0(MskDir,"\\",SpeciesRem, gsub("jpg","png",name))
