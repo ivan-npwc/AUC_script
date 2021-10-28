@@ -25,6 +25,7 @@ if (!require("spatialEco")) {install.packages("spatialEco");library("spatialEco"
 if (!require("RSQLite")) {install.packages("RSQLite")}
 #if (!require("sparklyr")) {install.packages("sparklyr");library(sparklyr);spark_install(version = "2.1.0")}
 if (!require("writexl")) {install.packages("writexl")}
+if (!require("shinythemes")) {install.packages("shinythemes");; library("shinythemes")}
 
 #if (!requireNamespace("BiocManager", quietly = TRUE))
 #  install.packages("BiocManager")
@@ -55,7 +56,7 @@ key <<-  listValue$key
 SQLite_path<<-  listValue$SQLite_path
 site   <<-  listValue$site
 KK_Effort <<-listValue$KK_Effort
-
+DarkTheme<<-listValue$DarkTheme; if (DarkTheme==T){Theme<<-"slate"} else {Theme<<-"lumen"}
 trainDir<<-listValue$trainDir
 
 Model_base<<-listValue$Model_base

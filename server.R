@@ -253,7 +253,12 @@ withProgress(message = paste0("Doing  ",labelInput), value = d , {
     updateActionButton (session,'LRG_pth',   label= paste0("LRG_pth:  ",LRG_pth))
   }) 
 #################################
+re26 = observeEvent(input$DarkTheme, {
+DarkTheme<<-input$DarkTheme
+    source("Modules/ListUniqueUpdate.r")
+  }) 
 
+#########################
 
 
 

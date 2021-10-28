@@ -5,6 +5,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
  ############################################################################################          
            tabPanel("CIC",
                      fluidPage (
+					 theme = shinytheme(Theme),
                        
                     #   column(width = 4,actionLink('Rookery_polygon',   label= paste0("Rookery_polygon:  ", Rookery_polygon), style = "font-size:12px;")),
                     #   column(width = 4,actionLink('Haulout_polygon',   label= paste0("Haulout_polygon:  ", Haulout_polygon), style = "font-size:12px;")),
@@ -127,6 +128,8 @@ tabPanel("Settings",
 	   	 hr(),
 		   fluidRow(column(width = 12,actionLink('DirModelsCheck',label= paste0("DirModelsCheck:  ", DirModelsCheck), style = "font-size:12px;"))),
 		 hr(),
+		 checkboxInput("DarkTheme", "DarkTheme", value=DarkTheme),
+		  hr(),
 	  	   fluidRow(dataTableOutput("text")) 
 ),
 #####################################################################################################
