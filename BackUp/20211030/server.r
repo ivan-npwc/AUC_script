@@ -161,13 +161,13 @@ withProgress(message = paste0("Doing  ",labelInput), value = d , {
   }) 
   ##################################################################################
   re13 = observeEvent( input$Weight, {
-    Weight<<-file.choose()
+    Weight<<-tk_choose.files(caption = "Select Weight",multi = F, default = Weight)
 	 source("Modules/ListUniqueUpdate.r")
     updateActionButton (session,'Weight',   label= paste0("Weight:  ",Weight))
   }) 
   #####################################################################################
   re14 = observeEvent( input$ModelPoligon, {
-    ModelPoligon<<-file.choose()
+    ModelPoligon<<-tk_choose.files(caption = "Select model polygon",multi = F, default = pth_log)
     updateActionButton (session,'ModelPoligon',   label= paste0("ModelPoligon:  ",ModelPoligon))
   }) 
   #####################################################################################

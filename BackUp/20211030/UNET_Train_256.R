@@ -1,15 +1,15 @@
-#UnetTrain256=function (
-#                      trainDir1=trainDir,
-#                       weight1=Weight,
-#                       Model_base1=Model_base, #"D:\\CIC\\SHINY_NFS_AUTOCOUNT\\20190505\\data\\TRAIN\\Val_0.43_epoch_16_NFS_256_Points.h5",
-#					   TrainIndex=0.85,  # how many data use for train and validate (1-TrainIndex)
-#					   BatchIntens= BatchIntens1,  # all train set will be procesing in one epoch 3 times
-#					   Split=Split1,	        # if split for train and validate
-#					   Smooth=1,       # smoth for accuracy model estimate  
-#					   batch_size=batch_size1,
-#					   epochs=epochs1,
-#					   dfrmn=F
-#					   ) {
+UnetTrain256=function (
+                      trainDir1=trainDir,
+                       weight1=Weight,
+                       Model_base1=Model_base, #"D:\\CIC\\SHINY_NFS_AUTOCOUNT\\20190505\\data\\TRAIN\\Val_0.43_epoch_16_NFS_256_Points.h5",
+					   TrainIndex=0.85,  # how many data use for train and validate (1-TrainIndex)
+					   BatchIntens= BatchIntens1,  # all train set will be procesing in one epoch 3 times
+					   Split=Split1,	        # if split for train and validate
+					   Smooth=1,       # smoth for accuracy model estimate  
+					   batch_size=batch_size1,
+					   epochs=epochs1,
+					   dfrmn=F
+					   ) {
 		
 
                       trainDir1=trainDir
@@ -17,12 +17,12 @@
                        Model_base1=Model_base
 					   TrainIndex=0.85
 					   BatchIntens= BatchIntens1
-					   Split= T  #Split1
+					   Split=Split1
 					   Smooth=1 
 					   batch_size=batch_size1
 					   epochs=epochs1
 					   dfrmn=F
-                      TypeTrain
+
 
 			 
 
@@ -104,10 +104,14 @@ bce_dice_loss <- function(y_true, y_pred) {
   return(result)
 }
 ########
-if ( exists("unet1")==F){source("Modules/UnetVGG16Create.r")}
-if(TypeTrain=="Retrain"){setWEight=readRDS(weight1); set_weights(unet1,setWEight)}
+if (Model_base1 != "_") {
+unet1 <- load_model_hdf5(Model_base1, custom_objects = c(dice_coef = dice_coef,
+                                                        dice_coef_loss=dice_coef_loss))
+}
+if (Model_base1 =="_" & weight1 !="_") {source("Modules/UnetVGG16Create.r");setWEight=readRDS(weight1); set_weights(unet1,setWEight)
+}
 
-
+if (Model_base1 =="_" & weight1 =="_") {source("Modules/UnetVGG16Create.r")}														
 														
 														
 unet1 <- unet1 %>%
@@ -310,7 +314,7 @@ train_generator <- function(images_dir,
   }
 }
 ############
-cl <- makePSOCKcluster(detectCores (logical = FALSE))
+cl <- makePSOCKcluster(detectCores (logical = FALSE)-1)
 clusterEvalQ(cl, {
   library(magick)     
   library(abind)     
@@ -419,7 +423,7 @@ filepathRDS=paste0(checkpoint_dir,"\\",Species,"_",dateTrain)
 saveRDS(a1,filepathRDS)
 ###########################################################################
 stopCluster(cl)
-#}
+}
 
-#if (tensorflow::tf_version() <= "2.0") {UnetTrain256()}
-#if (tensorflow::tf_version() > "2.0") {source("Modules/unet_train_model_3.r")}
+if (tensorflow::tf_version() <= "2.0") {UnetTrain256()}
+if (tensorflow::tf_version() > "2.0") {source("Modules/unet_train_model_3.r")}
