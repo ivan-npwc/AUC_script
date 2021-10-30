@@ -72,7 +72,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
                                                                  ))),
 														#############
 			fluidRow(column(width = 4, selectInput('site', 'site', width="1000px",multiple = F,
-                                                                                           c("138","30","19","20","3101","3102"),
+                                                                                           c("138","30","19","20"),
 							                                                              selected=site))),
                  
 			     fluidRow(column(width = 11,selectInput('Species', 'Species', width="200px",multiple = F,

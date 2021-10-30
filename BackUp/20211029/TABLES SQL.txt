@@ -1,0 +1,41 @@
+
+
+
+CREATE TABLE photo_count_list (r_year  INT, site    INT, r_date  DATE, time_start TIME, observer TEXT, comments TEXT, visibility  TEXT, rain  TEXT, distance  TEXT, type  TEXT, quality TEXT, splash  TEXT, datecreated TEXT DEFAULT CURRENT_TIMESTAMP, species  TEXT, type_count  TEXT, 
+PRIMARY KEY (r_year, site, r_date, time_start, species, type_count, observer));
+
+CREATE TABLE photo_count_files (r_year INT, site INT, r_date DATE, time_start  TIME, observer TEXT, comment TEXT, datecreated TEXT, file_name TEXT, latitude DECIMAL, longitude DECIMAL,altitude TEXT);
+
+
+CREATE TABLE polygons_model_sites (id TEXT, 
+                                                 order_point INT,
+												 latitude DECIMAL,
+												 longitude  DECIMAL, 
+												 site  TEXT,
+												 species   TEXT,
+												 r_date  TEXT,
+												 time_start   TEXT,
+												 projection TEXT,
+												 PRIMARY KEY (site, r_date, time_start, species,latitude,longitude,id,order_point));
+
+
+
+
+CREATE TABLE count (type_count TEXT,r_year INT, site INT, r_date DATE, time_start TIME, observer TEXT, local_site TEXT, 
+                                                                                                     TN INT, 
+                                                                                                     TF INT,
+																									   AN INT,
+																									   SA INT,
+																									   F INT, 
+																									   J INT, 
+																									   P INT,
+																									   U INT,
+																									   D INT, 
+																									   DP INT, 
+																									   Tr INT,
+																									   species TEXT,
+																									   datecreated TEXT, 
+																									   comments TEXT,
+PRIMARY KEY (r_year, site, r_date, time_start, observer, local_site,species), 
+FOREIGN KEY (r_year, site, r_date, time_start, observer, species) 
+REFERENCES photo_count_list (r_year, site, r_date, time_start, observer, species));
