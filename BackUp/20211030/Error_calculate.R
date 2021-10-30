@@ -22,7 +22,7 @@
                         PredictPointPTH_SSL_PUP = paste0(labelInput,"\\Predict\\", "SSLPup","_", date1, ".csv")
                         crs=CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs")
                         AnimalsDensPTH= paste0(labelInput,"\\Predict\\",  date1,"_",Species, "_AnimalDense.csv")
-if(dir.exists(ObserverPointDIR)==F){ObserverPointDIR=paste0(labelInput,"\\Observer_count")}
+                        if(dir.exists(ObserverPointDIR)==F){ObserverPointDIR=paste0(labelInput,"\\Observer_count")}
 
 
 
@@ -32,7 +32,7 @@ HouloutPoligonPTH=list.files(HouloutPoligonDIR,full.names=T,pattern=".shp")
 RookeryPolygonPTH=list.files(RookeryPolygonDIR,full.names=T,pattern=".shp")
 ObserverPointPTH=list.files(ObserverPointDIR,full.names=T,pattern=".shp")[1] 
     
-	if (length(ModelPoligonPTH) >1 | length(ObserverPointPTH) >1) {
+	if (length(ModelPoligonPTH) > 0  & length(ObserverPointPTH) > 0) {
 	
 if (length(ModelPoligonPTH)>1 | length(HouloutPoligonPTH)>1 | length(RookeryPolygonPTH)>1 | length(ObserverPointPTH)>1) {
  stop("Only one shape file must by in one folder") }
@@ -390,5 +390,5 @@ Report<<-list(date1=basename(labelInput),
 #}				
 ########################################################################################################
 ###########################################################################################
-} else {print("Data insufficient to Error calculate")}
+} else {print("No obderver count dir or model poliygons dir found")}
 
