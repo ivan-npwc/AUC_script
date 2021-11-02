@@ -8,10 +8,10 @@ library(foreach)
 library(keras)
 
              trainDir= "C:\\SSL_DB\\TRAIN\\LRG_Measurements"
-             epochs=200
+             epochs=100
 			 batch_size=32
 			 BaseModel_pth= ""
-             TrainIndex=1  # every img 4 times for 1 epoch
+             TrainIndex=0.7  # use 70% for train and 30 for validate
              NewModelCreate=T
              trgt_size=256
         
@@ -46,10 +46,12 @@ if (NewModelCreate==T) {
 	} else {model_regresion=model_regresion(BaseModel_pth)}	
 #########################################################################
        train_samples <- length(list.files(images_dir))
-      # val_train_samples=  length(list.files(val_images_dir1,full.names=T, recursive=T, include.dirs=F))
-       steps_per_epoch= round(train_samples/batch_size*1)
-       train_index <- sample(1:train_samples, round(train_samples * TrainIndex)) # we can rondomly select some parts, using not 100% data
-    #   val_index <- sample(1:val_train_samples, round(val_train_samples * DataUsingIndex)) 
+       train_index <- sample(1:train_samples)[1:round(train_samples * TrainIndex)] 
+       val_index0 <-  c(1:train_samples)
+       val_index=val_index0[!(val_index0 %in% train_index)]
+print(paste0("Found  ", length(train_index)," Images for TRAIN ",Species)) 
+print(paste0("Found  ", length(val_index)," Images for VALIDATE ",Species)) 
+     steps_per_epoch= round(length(train_index)/batch_size*BatchIntens)
 #####################################################################
 imagesRead <- function(image_file) {
   img <- image_read(image_file);img <- image_scale(img, "256x256!")
@@ -97,12 +99,12 @@ img2arr <- function(image,
   return(result)
 }
 #############################################################
-val_generator <- function(val_images_dir, 
+val_generator <- function(images_dir, 
                           samples_index,
                           batch_size) {
-  images_iter <- list.files(val_images_dir,  
+  images_iter <- list.files(images_dir,  
                             full.names = T, recursive=T, include.dirs=F)[samples_index] # for current epoch
-  images_all1 <- list.files(val_images_dir, 
+  images_all1 <- list.files(images_dir, 
                            full.names = T, recursive=T, include.dirs=F)[samples_index]  # for next epoch
 
   function() {
@@ -230,12 +232,11 @@ train_iterator <- py_iterator(train_generator(images_dir = images_dir,
                                               samples_index = train_index,
                                               batch_size = batch_size))
 
-#val_iterator <- py_iterator(val_generator(val_images_dir1 = val_images_dir1,
-#                                          val_images_dir2 = val_images_dir2,
-#                                          samples_index = val_index,
-#                                          batch_size = batch_size))
+val_iterator <- py_iterator(val_generator(val_images_dir = images_dir,                           
+                                          samples_index = val_index,
+                                          batch_size = batch_size))
 iter_next(train_iterator)
-#iter_next(val_iterator)			
+iter_next(val_iterator)			
 #############################################################################################################
 #early_stopping <- callback_early_stopping(patience = 4)
 #filepath <- file.path(checkpoint_dir, "Val_{val_acc:.2f}_epoch_{epoch:02d}_AgeSSL.h5")
@@ -247,11 +248,10 @@ iter_next(train_iterator)
 model_regresion %>% fit_generator (
   train_iterator,
   steps_per_epoch =  steps_per_epoch,
-  epochs =  epochs)
-  
-  				
-#  validation_data = val_iterator,
-#  validation_steps = steps_per_epoch,
+  epochs =  epochs  				
+  validation_data = val_iterator,
+  validation_steps = steps_per_epoch)
+  ,
 #  verbose = 1,
 #  callbacks = list(early_stopping,cp_callback)
 #)

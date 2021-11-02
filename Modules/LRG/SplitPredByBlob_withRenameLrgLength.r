@@ -173,18 +173,19 @@ file.copy(listImgsSub[u],CategoryFold)
 
 
 
-# lngthA=as.numeric(tblB$lngth)
-#
-#	mean <-  mean(lngthA,na.rm = F)
- #   std <-   sd(lngthA,na.rm = F)
- #   stdLength <- as.numeric(scale(lngthA, center = mean, scale = std))
+ lngthA=as.numeric(tblB$lngth)
+
+	mean <-  mean(lngthA,na.rm = F)
+   std <-   sd(lngthA,na.rm = F)
+    stdLength <- as.numeric(scale(lngthA, center = mean, scale = std))
 	
-#	stdLength=format(round(stdLength,digits = 2), nsmall = 2)
-#	tblB$stdLength=stdLength
+	stdLength=format(round(stdLength,digits = 2), nsmall = 2)
+	tblB$stdLength=stdLength
 	
-#tblB$NewImgPth=paste0(tblB$stdLength,"_", basename(tblB$NewImgPth))
-#	from=paste0(dirSave,"\\",
-#	file.rename(from, to)
+tblB$NewImgPth=paste0(tblB$stdLength,"_", basename(tblB$NewImgPth))
+
+	from=paste0(dirSave,"\\",
+	file.rename(from, to)
 	
 	
 	
