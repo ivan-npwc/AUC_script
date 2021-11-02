@@ -1,19 +1,4 @@
-source("Modules/KMLwrite_function.r")
-#source("C:/SSL_DB/AUC_script/Modules/KMLwrite_function.r")
-##################################################################################
-Age_Pred_Fun=function(
-  #  labelInput, #"C:\\SSL_DB\\2020_138_OPP\\20200612_143112"
-    Species="SSLAdult",           
-	batch_size = 64,
-	trgt_size = 256,
-	type,
-	check=F,
-	modelBASEAgePTH <<-       paste0(System_data,"/weights/SSL AGE/ROOKERY SSLAdult_Feb 19  2021_Val_0.89_epoch_01.h5"),
-	RookerytWeightPTH<<-    paste0(System_data,"/weights/SSL AGE/SSLageROOKERYweight"),
-	HauloutWeightPTH<<-     paste0(System_data,"/weights/SSL AGE/SSLageHAULOUTweight" )) {	
-	#"C:\\SSL_DB\\AUC_script\\System data\\weights\\SSL AGE\\SSLageHAULOUTweight"
-	
-	library(abind)
+    library(abind)
     library(reticulate)
     library(parallel)
     library(doParallel)
@@ -21,36 +6,20 @@ Age_Pred_Fun=function(
 	library(EBImage)
     library(keras)
 	library(magick) 
-	date1=substr(basename(labelInput),1,15)
-	if(exists("modelAge")==F){modelAge=load_model_hdf5(modelBASEAgePTH)}
 	
-if (type=="Rookery"){
-     #     modelAgePTH =    "C:\\SSL_DB\\SSL_age\\Checkpoints\\SSLAdult_Feb 19  2021_Val_0.89_epoch_01.h5"
-		 # modelAge=load_model_hdf5(modelAgePTH)
-		  
-		  RookerytWeight=readRDS(RookerytWeightPTH)
-		  set_weights(modelAge,RookerytWeight)
-	      Age_Name= c("TF","F", "J")      		
-          pth<<- paste0(labelInput,"\\Predict\\Age_predict\\Rookery")
-	      PthTblAgeRef=paste0(labelInput,"\\Predict\\",date1,"_", Species,"AgeRef.csv")
-	      PTH_TableGeoAge =paste0(labelInput,"\\Predict\\",date1,"_", Species,"_ROOKERY.csv")
-          kmlPathSave=paste0(labelInput,"\\Predict\\",date1,"_", Species,"_ROOKERY.kml")
-	     # ProbAge_PTH=paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"_ProbAge.csv")      
-  }
-############################################################################
-if (type=="Haulout"){
-      #  modelAgePTH =    "C:\\SSL_DB\\SSL_age\\HAULOUT\\Checkpoints\\SSLAdult_Feb 22  2021_Val_0.92_epoch_02.h5"
-		# modelAge=load_model_hdf5(modelAgePTH)
-	     
-		  HauloutWeight=readRDS(HauloutWeightPTH)
-		  set_weights(modelAge,HauloutWeight)
-	      Age_Name= c("An","J", "Sa")      		
-          pth<<- paste0(labelInput,"\\Predict\\Age_predict\\Haulout")
-	      PthTblAgeRef=paste0(labelInput,"\\Predict\\",date1,"_", Species,"AgeRef.csv")
-	      PTH_TableGeoAge =paste0(labelInput,"\\Predict\\",date1,"_", Species,"_HAULOUT.csv")
-          kmlPathSave=paste0(labelInput,"\\Predict\\",date1,"_", Species,"_HAULOUT.kml")
-	     # ProbAge_PTH=paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"_ProbAge.csv")    
-  }
+	
+	labelInput
+    Species="LRG"          
+	trgt_size = 256
+    modelPTH <<-   ""
+	
+    date1=substr(basename(labelInput),1,15)
+	pth= "D:\\PL_DB\\2021_3101_OPP\\20210725_084310\\Predict\\LRG_Measurements\\Image"
+	listImgPred<<-list.files(pth,full.names=T)
+	
+	if(exists("model_regresion")==F){model_regresion=load_model_hdf5(modelPTH)}
+	
+
 ############################################################################
  imageRead <- function(image_file,
                           target_width = trgt_size, 
@@ -63,37 +32,31 @@ if (type=="Haulout"){
       dim(result) <- c(1, target_width, target_height, 3)
       return(result)
 	}
-##############
-listImgPred<<-list.files(pth)
+##################################
+
 if (length(listImgPred)>0) {
 finWrite=NULL
 for (u in 1: length(listImgPred)) {
-  imgPth=paste0(pth, "\\", listImgPred[u])
+  imgPth=listImgPred[u]
    img_tensor=imageRead(imgPth)
-  preds = c(modelAge %>% predict(img_tensor))
-  name= Age_Name  
-  position=c(1:length(name))
-  result=data.frame(preds,name)
-  result=result[order(-preds),]
-  result<<-data.frame(result,position)
-  result=result[1,]
-  result=cbind(result,imgPth)
+  preds = c(model_regresion %>% predict(img_tensor))
+  
+  result=data.frame(imgPth,preds)
   finWrite=rbind(finWrite,result)
 }
 } 
-preds3<<-finWrite
+
+for (i in 1:length(finWrite$preds)) {
+preds=as.numeric(finWrite$preds[i])
+real=as.numeric(strsplit(basename(finWrite$imgPth[i]),"_")[[1]][1])
+
+finWrite$Correction[i]=real/preds
+
+}
+
+
 #################################################################################################
-	  TblAgeRef=read.csv(PthTblAgeRef)
-      TblAgeRef$link=basename(as.character(TblAgeRef$pth_save_img))
-	  
-      preds3$link=basename(as.character(preds3$imgPth))
-      TableGeoAge <<- merge(x=preds3,y=TblAgeRef,by="link",all=T)
-	  TableGeoAge=TableGeoAge[is.na(TableGeoAge$name)==F,]
-	  
-      TableGeoAge1 <<- data.frame(lon=TableGeoAge$lat,lat=TableGeoAge$lon,age= TableGeoAge$name)
-  
-      write.csv(TableGeoAge1,PTH_TableGeoAge)
-	  KMLwrite(Img3=TableGeoAge1,kmlPathSave)
+	 
 ##############################################################################################
 if (check==T){
 	  dirSave=paste0(labelInput,"\\Predict\\Age_check");unlink(dirSave)
@@ -108,6 +71,4 @@ file.copy(from,to)
 }
 }
 #########################################
-}
-Age_Pred_Fun(type="Haulout")
-Age_Pred_Fun(type="Rookery")
+
