@@ -34,7 +34,7 @@ source("Modules/KMLwrite_function.r")
  if (Species =="NFSPup") {BlobFemaleLimit=0}
  if (Species =="WLRS") {BlobFemaleLimit=40}
  if (Species == "SSLPup") {BlobFemaleLimit=0}
-  if (Species == "LRG") {BlobFemaleLimit=600}  # 900- junior
+  if (Species == "LRG") {BlobFemaleLimit=0}
 ####################################################################################################
 PointsHoulout2=NULL
 RookeryPoints=NULL
