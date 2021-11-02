@@ -14,7 +14,7 @@ library(keras)
              TrainIndex=0.7  # use 70% for train and 30 for validate
              NewModelCreate=T
              trgt_size=256
-        
+             BatchIntens=1 # use only one uniq image on a epoch
 		
              dateTrain=format(Sys.time(),  "%b%d %Y") 
 		     checkpoint_dir=paste0(trainDir,"\\Checkpoints");if(dir.exists(checkpoint_dir)==F) {dir.create(checkpoint_dir)}
@@ -48,7 +48,7 @@ if (NewModelCreate==T) {
        train_samples <- length(list.files(images_dir))
        train_index <- sample(1:train_samples)[1:round(train_samples * TrainIndex)] 
        val_index0 <-  c(1:train_samples)
-       val_index=val_index0[!(val_index0 %in% train_index)]
+       val_index =val_index0[!(val_index0 %in% train_index)]
 print(paste0("Found  ", length(train_index)," Images for TRAIN ",Species)) 
 print(paste0("Found  ", length(val_index)," Images for VALIDATE ",Species)) 
      steps_per_epoch= round(length(train_index)/batch_size*BatchIntens)
@@ -104,7 +104,7 @@ val_generator <- function(images_dir,
                           batch_size) {
   images_iter <- list.files(images_dir,  
                             full.names = T, recursive=T, include.dirs=F)[samples_index] # for current epoch
-  images_all1 <- list.files(images_dir, 
+  images_all <- list.files(images_dir, 
                            full.names = T, recursive=T, include.dirs=F)[samples_index]  # for next epoch
 
   function() {
@@ -232,7 +232,7 @@ train_iterator <- py_iterator(train_generator(images_dir = images_dir,
                                               samples_index = train_index,
                                               batch_size = batch_size))
 
-val_iterator <- py_iterator(val_generator(val_images_dir = images_dir,                           
+val_iterator <- py_iterator(val_generator(images_dir = images_dir,                           
                                           samples_index = val_index,
                                           batch_size = batch_size))
 iter_next(train_iterator)
@@ -248,10 +248,10 @@ iter_next(val_iterator)
 model_regresion %>% fit_generator (
   train_iterator,
   steps_per_epoch =  steps_per_epoch,
-  epochs =  epochs  				
+  epochs =  epochs,  				
   validation_data = val_iterator,
   validation_steps = steps_per_epoch)
-  ,
+  
 #  verbose = 1,
 #  callbacks = list(early_stopping,cp_callback)
 #)
