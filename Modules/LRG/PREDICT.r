@@ -12,9 +12,11 @@
     Species="LRG"          
 	trgt_size = 256
     modelPTH <<-   ""
+	check=F
+	dirSave="C:\\SSL_DB\\TRAIN\\LRG_Measurements\\Check"
 	
     date1=substr(basename(labelInput),1,15)
-	pth= "D:\\PL_DB\\2021_3101_OPP\\20210725_084310\\Predict\\LRG_Measurements\\Image"
+	pth= "C:\\SSL_DB\\TRAIN\\LRG_Measurements\\Image"
 	listImgPred<<-list.files(pth,full.names=T)
 	
 	if(exists("model_regresion")==F){model_regresion=load_model_hdf5(modelPTH)}
@@ -48,7 +50,7 @@ for (u in 1: length(listImgPred)) {
 
 for (i in 1:length(finWrite$preds)) {
 preds=as.numeric(finWrite$preds[i])
-real=as.numeric(strsplit(basename(finWrite$imgPth[i]),"_")[[1]][1])
+real=as.numeric(strsplit(basename(as.character(finWrite$imgPth[i])),"_")[[1]][1])
 
 finWrite$Correction[i]=real/preds
 
@@ -59,8 +61,7 @@ finWrite$Correction[i]=real/preds
 	 
 ##############################################################################################
 if (check==T){
-	  dirSave=paste0(labelInput,"\\Predict\\Age_check");unlink(dirSave)
-      dir.create(dirSave,showWarnings = F)	  
+		  
 for (i in 1:length(preds3[,1])) {
 row1=preds3[i,]
 from=row1$imgPth

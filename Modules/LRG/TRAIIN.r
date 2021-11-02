@@ -7,18 +7,19 @@ library(doParallel)
 library(foreach)
 library(keras)
 
-             trainDir=train_Gen_dir= "D:\\PL_DB\\2021_3101_OPP\\20210725_084310\\Predict\\LRG_Measurements"
-             epochs=25
+             trainDir= "C:\\SSL_DB\\TRAIN\\LRG_Measurements"
+             epochs=200
 			 batch_size=32
 			 BaseModel_pth= ""
              TrainIndex=1  # every img 4 times for 1 epoch
-            NewModelCreate=T
-            trgt_size=256
-
+             NewModelCreate=T
+             trgt_size=256
+        
+		
              dateTrain=format(Sys.time(),  "%b%d %Y") 
-		     checkpoint_dir=paste0(train_Gen_dir,"\\Checkpoints");if(dir.exists(checkpoint_dir)==F) {dir.create(checkpoint_dir)}
-			 train_dir =  paste0(train_Gen_dir,"\\Train")
-			 images_dir=train_dir
+		     checkpoint_dir=paste0(trainDir,"\\Checkpoints");if(dir.exists(checkpoint_dir)==F) {dir.create(checkpoint_dir)}
+			 images_dir =  paste0(trainDir,"\\Image")
+			 
 ##########################################################################
 if (NewModelCreate==T) {
 		  conv_base <- application_vgg16(
@@ -44,7 +45,7 @@ if (NewModelCreate==T) {
 						model_regresion					
 	} else {model_regresion=model_regresion(BaseModel_pth)}	
 #########################################################################
-       train_samples <- length(list.files(train_dir,full.names=T, recursive=T, include.dirs=F))
+       train_samples <- length(list.files(images_dir))
       # val_train_samples=  length(list.files(val_images_dir1,full.names=T, recursive=T, include.dirs=F))
        steps_per_epoch= round(train_samples/batch_size*1)
        train_index <- sample(1:train_samples, round(train_samples * TrainIndex)) # we can rondomly select some parts, using not 100% data
