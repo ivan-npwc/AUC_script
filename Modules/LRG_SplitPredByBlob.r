@@ -6,9 +6,11 @@
     library(raster)
 	library(geosphere)
 	
+
+	Type="Predict"   # "Train"
     BlobFemaleLimit=600
-    labelInput= "D:\\PL_DB\\2021_3101_OPP\\20210725_084310"
-    Species="LRG"
+    labelInput  #= "D:\\PL_DB\\2021_3101_OPP\\20210725_084310"
+    Species     #="LRG"
 	
 	
      date1 =   substr(basename(labelInput),1,15)
@@ -100,7 +102,6 @@ for (f in 1:length(listPreds)) {
 	  
 	    
 #------------------------------------------------------------	 
-	
 	   vectorObjects=c(1:max(nmask4))
 	  
     for (h in 1:length(vectorObjects)) {
@@ -108,6 +109,8 @@ for (f in 1:length(listPreds)) {
       letter = rmObjects(nmask4, object, reenumerate=FALSE)# get only one object
 
 	  ################################# here we shood paste script to finde a length of the seal
+	 if( Type=="Train"){
+	  
 	  Oc =data.frame(ocontour(letter));names(Oc)=c("x","y")# here may be invert needed
 	  Oc$lon=((1024- Oc$y)*NSdifStep)+RefSort$south50 
       Oc$lat=(Oc$x*WEdifStep)+RefSort$west50
@@ -119,18 +122,22 @@ for (f in 1:length(listPreds)) {
 	  
 	  pts = lns[!is.na(over(lns,as(Poligon,"SpatialPolygons"))),]
   if (length(pts) !=0) {
-	  lngth= round(geosphere::lengthLine(pts),digits = 2)*100 # IN METERS *100
-	 # lngth=format(lngth, nsmall = 2)
+	  lngth= round(geosphere::lengthLine(pts),digits = 2)*100 # IN SANTIMETERS
+	}
+	}
 	  ########################################################### MAKE THE BLOB BIGER
 	  letter1=dilate(letter, makeBrush(241, shape='diamond'))
 	  
 	  fts = data.frame(computeFeatures.moment(letter1))
 	  x=mean(fts$m.cx)
 	  y=mean(fts$m.cy)
-  if (x>1024*0.25 & x<1024*0.75 & y>1024*0.25 & y<1024*0.75) { 
+if (x>1024*0.25 & x<1024*0.75 & y>1024*0.25 & y<1024*0.75) { 
 
     imgpth=paste0(ImgDir,"\\",name)
-	NewImgPth=paste0(dirSave,"\\",lngth,"_", file_path_sans_ext(name),"_",h,".",file_ext(name))
+if( Type=="Predict"){lngth=NA
+                    NewImgPth=paste0(dirSave,"\\",file_path_sans_ext(name),"_",h,".",file_ext(name))}
+if( Type=="Train"){NewImgPth=paste0(dirSave,"\\",lngth,"_", file_path_sans_ext(name),"_",h,".",file_ext(name))}	
+	
 	
     letter1[letter1>0.5]=1
 	letter1[letter1<=0.5]=0
@@ -148,45 +155,10 @@ for (f in 1:length(listPreds)) {
 	}
 	}
     }
-	}
-	
+
 	write.csv(tblB,pthtblB,row.names=F)
-	
 #########################################################	
-dirSave
-TableImgs=read.csv(pthtblB)
-category1=unique(TableImgs$lngth)
-for (i in 1:length(category1)) {
-category2=category1[i]
-CategoryFold=paste0(dirSave,"\\",category2)
 
-listImgsSub=TableImgs$NewImgPth[TableImgs$lngth==category2]
- for(u in 1:length(listImgsSub)) {
- 
- if (file.exists(listImgsSub[u])){
-  dir.create(CategoryFold,showWarnings = F)
-file.copy(listImgsSub[u],CategoryFold)
-}
-}
-}
-
-
-
-
- lngthA=as.numeric(tblB$lngth)
-
-	mean <-  mean(lngthA,na.rm = F)
-   std <-   sd(lngthA,na.rm = F)
-    stdLength <- as.numeric(scale(lngthA, center = mean, scale = std))
-	
-	stdLength=format(round(stdLength,digits = 2), nsmall = 2)
-	tblB$stdLength=stdLength
-	
-tblB$NewImgPth=paste0(tblB$stdLength,"_", basename(tblB$NewImgPth))
-
-	from=paste0(dirSave,"\\",
-	file.rename(from, to)
-	
 	
 	
 	

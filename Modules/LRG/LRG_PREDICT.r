@@ -9,17 +9,17 @@
 	
 	
 	labelInput
-    Species="LRG"          
+    Species  #= "LRG"          
 	trgt_size = 256
-    modelPTH <<-   ""
-	check=F
-	dirSave="C:\\SSL_DB\\TRAIN\\LRG_Measurements\\Check"
+    modelPTH <<-   paste0(System_data, "\\weights\\",LRGH_MSRMNTS)
+	ImgsPth= paste0(labelInput,"\\Predict\\",Species,"_Measurements\\Image")
+    pthFinWrite= paste0(labelInput,"\\Predict\\",Species,"_Measurements\\Predict_Measurements",)
+	
 	
     date1=substr(basename(labelInput),1,15)
-	pth= "C:\\SSL_DB\\TRAIN\\LRG_Measurements\\Image"
-	listImgPred<<-list.files(pth,full.names=T)
+	listImgPred<<-list.files(ImgsPth,full.names=T)
 	
-	if(exists("model_regresion")==F){model_regresion=load_model_hdf5(modelPTH)}
+	if(exists("model_regresion")==F){model_regresion=load_model_hdf5(modelREGpth)}
 	
 
 ############################################################################
@@ -27,8 +27,8 @@
                           target_width = trgt_size, 
                           target_height = trgt_size) {
       img <- image_read(image_file)
-	  img=image_flop(img)
-	  img=image_rotate(img,270)
+	 # img=image_flop(img)
+	 # img=image_rotate(img,270)
       img <- image_scale(img, paste0(target_width, "x", target_height, "!"))
       result <- aperm(as.numeric(img[[1]])[, , 1:3], c(2, 1, 3)) # transpose
       dim(result) <- c(1, target_width, target_height, 3)
@@ -47,29 +47,10 @@ for (u in 1: length(listImgPred)) {
   finWrite=rbind(finWrite,result)
 }
 } 
+write.csv(finWrite,pthFinWrite, row.names=F)
 
-for (i in 1:length(finWrite$preds)) {
-preds=as.numeric(finWrite$preds[i])
-real=as.numeric(strsplit(basename(as.character(finWrite$imgPth[i])),"_")[[1]][1])
-
-finWrite$Correction[i]=real/preds
-
-}
 
 
 #################################################################################################
-	 
-##############################################################################################
-if (check==T){
-		  
-for (i in 1:length(preds3[,1])) {
-row1=preds3[i,]
-from=row1$imgPth
-folder=row1$name
-to=paste0(dirSave,"\\",folder)
-dir.create(to,showWarnings = F)
-file.copy(from,to)
-}
-}
-#########################################
+
 

@@ -247,19 +247,13 @@ withProgress(message = paste0("Doing  ",labelInput), value = d , {
     updateActionButton (session,'System_data',   label= paste0("System_data:  ",System_data))
   }) 
   ####################################################################################### 
-       re26 = observeEvent( input$LRGH_MSRMNTS, {
-    LRGH_MSRMNTS<<-basename(file.choose())
-    source("Modules/ListUniqueUpdate.r")
-    updateActionButton (session,'LRGH_MSRMNTS',   label= paste0("LRGH_MSRMNTS:  ",LRGH_MSRMNTS))
-  }) 
-#################################
-    re27 = observeEvent( input$LRG_pth, {
+       re26 = observeEvent( input$LRG_pth, {
     LRG_pth<<-basename(file.choose())
     source("Modules/ListUniqueUpdate.r")
     updateActionButton (session,'LRG_pth',   label= paste0("LRG_pth:  ",LRG_pth))
   }) 
 #################################
-re28 = observeEvent(input$DarkTheme, {
+re26 = observeEvent(input$DarkTheme, {
 DarkTheme<<-input$DarkTheme
     source("Modules/ListUniqueUpdate.r")
   }) 

@@ -52,7 +52,6 @@ Weight<<- listValue$Weight
 WLRS_Sand_weight_pth<<-  listValue$WLRS_Sand_weight_pth
 WLRS_Rocky_weight_pth<<-  listValue$WLRS_Rocky_weight_pth
 LRG_pth<<-listValue$LRG_pth
-LRGH_MSRMNTS  <<-listValue$LRGH_MSRMNTS
 key <<-  listValue$key
 SQLite_path<<-  listValue$SQLite_path
 site   <<-  listValue$site

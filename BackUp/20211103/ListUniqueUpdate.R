@@ -30,7 +30,6 @@ listUniq <- list(
 					   DirModelsCheck=DirModelsCheck,
 					   System_data=System_data,
 					   site=site,
-					   LRGH_MSRMNTS=LRGH_MSRMNTS,
 					 DarkTheme=DarkTheme
 
 
