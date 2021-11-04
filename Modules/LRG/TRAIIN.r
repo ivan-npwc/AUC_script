@@ -7,14 +7,15 @@ library(doParallel)
 library(foreach)
 library(keras)
 
+             Species="LRG"
              trainDir= "C:\\SSL_DB\\TRAIN\\LRG_Measurements"
-             epochs=100
-			 batch_size=32
+             epochs=25
+			 batch_size=128
 			 BaseModel_pth= ""
-             TrainIndex=0.7  # use 70% for train and 30 for validate
+             TrainIndex=1  # use 70% for train and 30 for validate
              NewModelCreate=T
              trgt_size=256
-             BatchIntens=1 # use only one uniq image on a epoch
+             BatchIntens=4 # use only one uniq image on a epoch
 		
              dateTrain=format(Sys.time(),  "%b%d %Y") 
 		     checkpoint_dir=paste0(trainDir,"\\Checkpoints");if(dir.exists(checkpoint_dir)==F) {dir.create(checkpoint_dir)}
@@ -29,9 +30,9 @@ if (NewModelCreate==T) {
 		   
 		   model_regresion <<- keras_model_sequential() %>%
 											   conv_base %>%
-							  layer_dropout(rate = 0.5) %>% 
+							#  layer_dropout(rate = 0.5) %>% 
 										  layer_flatten() %>%  
-	layer_dense(units = 64, activation = "relu",name = "fc4") %>%   
+	layer_dense(units = 128, activation = "relu",name = "fc4") %>%   
     layer_batch_normalization() %>%    	
 	layer_dense(units = 1,name = "predictions")
 	 
@@ -238,21 +239,32 @@ val_iterator <- py_iterator(val_generator(images_dir = images_dir,
 iter_next(train_iterator)
 iter_next(val_iterator)			
 #############################################################################################################
-#early_stopping <- callback_early_stopping(patience = 4)
-#filepath <- file.path(checkpoint_dir, "Val_{val_acc:.2f}_epoch_{epoch:02d}_AgeSSL.h5")
-#cp_callback <- callback_model_checkpoint( 
-#  filepath = filepath,
-#  period = 1,
-#  verbose = 1)
+early_stopping <- callback_early_stopping(patience = 4)
+filepath <- file.path(checkpoint_dir, "Val_{mean_absolute_error:.2f}_epoch_{epoch:02d}_LRGmeasur.h5")
+cp_callback <- callback_model_checkpoint( 
+  filepath = filepath,
+  period = 1,
+  verbose = 1)
 ############################################################################
+if(TrainIndex == 1) { 
+model_regresion %>% fit_generator (
+  train_iterator,
+  steps_per_epoch =  steps_per_epoch,
+  epochs =  epochs,
+  verbose = 1,
+  callbacks = list(cp_callback,early_stopping))
+
+} else {
+
 model_regresion %>% fit_generator (
   train_iterator,
   steps_per_epoch =  steps_per_epoch,
   epochs =  epochs,  				
   validation_data = val_iterator,
-  validation_steps = steps_per_epoch)
+  validation_steps = steps_per_epoch,
+  verbose = 1,
+  callbacks = list(cp_callback,early_stopping))
+}  
   
-#  verbose = 1,
-#  callbacks = list(early_stopping,cp_callback)
 #)
 ####
