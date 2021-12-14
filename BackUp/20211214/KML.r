@@ -126,7 +126,7 @@ RP=Pointsfilter(tble=dat3,pthPolygon=Rookery_polygon)
     PointsHoulout2$age="0"
 	 for (k  in 1:length(PointsHoulout2$area)) {
      if (PointsHoulout2$area[k] <= BlobFemaleLimit)  {PointsHoulout2$age[k]="Bch"}
-     if (PointsHoulout2$area[k] > BlobFemaleLimit)   {PointsHoulout2$age[k]="AN"}
+     if (PointsHoulout2$area[k] > BlobFemaleLimit)   {PointsHoulout2$age[k]="An"}
    }
 #   }
    }

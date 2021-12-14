@@ -46,8 +46,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
 														 #   "01_NormalizePxSiz" = "NormalizePxSiz",
 														    
 														    "01_Get_Agisoft_Shape"="GetAgisoftShape",
-														    "Save"="Save",
-															"SaveToExcell"="SaveToExcell"
+														    "Save"="Save"
 														#	"02_ModelToWeight"="ModelToWeight",
 														 #   "AGE_TrainPrepare"="AGE_TrainPrepare",
 													# "-----WLRS----------------------------"="B4",

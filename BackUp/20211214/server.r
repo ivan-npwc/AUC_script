@@ -44,7 +44,6 @@ function(input, output, session) {
 	Terrain<<-input$Terrain
 	Count_type<<-input$type
 	UseAllHauloutImages  <<- input$UseAllHauloutImages
-	loopCheck<<-0
 	##########
    if (OPPListPred1=="All") {OPPListPred1=list.files(as.character(unique(listValue$pthOPP)))}
    ForLoop_OPPListPred1 <<- OPPListPred1
