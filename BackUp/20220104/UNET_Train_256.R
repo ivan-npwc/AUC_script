@@ -15,7 +15,7 @@
                       trainDir1=trainDir
                        weight1=Weight
                        Model_base1=Model_base
-					   TrainIndex=0.9
+					   TrainIndex=0.85
 					   BatchIntens= BatchIntens1
 					   Split= T  #Split1
 					   Smooth=1 
@@ -400,20 +400,20 @@ val_iterator <- py_iterator(val_generator(images_dir = images_dir,
 #a=iter_next(train_iterator)
 #iter_next(val_iterator)			
 #######################################################################
- #         keras:::fit.keras.engine.training.Model(unet1,
- #                                                train_iterator,
- #                                             
- #                                                epochs = epochs)
+          keras:::fit.keras.engine.training.Model(unet1,
+                                                 train_iterator,
+                                              
+                                                 epochs = epochs)
 ############################################################################
-unet1 %>% fit_generator(
-  train_iterator,
-  steps_per_epoch =  steps_per_epoch,
-  epochs = epochs, 
-  validation_data =  val_iterator,
-  validation_steps = steps_per_epoch,
-  verbose = 1,
-  callbacks = list(early_stopping,cp_callback)
-)
+#unet1 %>% fit_generator(
+#  train_iterator,
+#  steps_per_epoch =  steps_per_epoch,
+#  epochs = epochs, 
+#  validation_data =  val_iterator,
+#  validation_steps = steps_per_epoch,
+#  verbose = 1,
+#  callbacks = list(early_stopping,cp_callback)
+#)
 a1=get_weights(unet1)
 filepathRDS=paste0(checkpoint_dir,"\\",Species,"_",dateTrain)
 saveRDS(a1,filepathRDS)
