@@ -5,7 +5,7 @@ library(raster)
 library(dplyr)
 library(geosphere)
 #########################################################################################################
- date1=substr(basename(labelInput),1,15)
+ date1=basename(labelInput)
   date= date1 #substr(date1,1,nchar(date1)-4)
 pthTable=paste0(labelInput,"\\",date, "Points.csv")
 pthTableNew=paste0(labelInput,"\\",date, "_CountDist.csv")
