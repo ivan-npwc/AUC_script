@@ -1,7 +1,7 @@
 library(magick)
 
 
- labelInput= "E:\\2021_19_OPP\\20210728_105310_DKV1996"
+ labelInput="D:\\CU_DB\\2021_138_OPP\\20210727_074648_VES"
  date1=substr(basename(labelInput),1,15)
  Tpth=paste0(labelInput,"\\", date1, "_table.csv")
  BigImgDir=paste0(labelInput, "\\", "Predict", "\\","Haulout")
@@ -17,27 +17,8 @@ coordCrop2=paste0("512x512+384+128")
 coordCrop3=paste0("512x512+128+384")
 coordCrop4=paste0("512x512+384+384")
 ######################
-  
- 
- 
- cl <- makePSOCKcluster(detectCores (logical=FALSE)) 
-    clusterExport(cl, "KMLpath")
-    clusterEvalQ(cl, {
-      library(magick)	 
-    })
-    registerDoParallel(cl)
-  foreach(i = 1:length(listBigImgs)) %dopar% {	
-    #  for (i in 1: length(listBigImgs)) {
- 
- 
- Crop1=NULL
- Crop2=NULL
- Crop3=NULL
- Crop4=NULL
- 
- 
- 
- 
+  for (i in 1: length(listBigImgs)) {
+  i=500
   imgP=listBigImgs[i]
   Nm=basename(imgP)
   BgImg=image_read(imgP)

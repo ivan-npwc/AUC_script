@@ -1,7 +1,7 @@
 
-IncludeEmptyImgs=F
+IncludeEmptyImgs=T
 
-Species
+
 labelInput
 
 library(parallel)
@@ -11,54 +11,56 @@ library(sp)
 library(spatialEco)
 library(raster)
 library(EBImage)
-   Species
-  date1=substr(basename(labelInput),1,15)
 
-HauloutDir=paste0(labelInput,"\\Predict\\Haulout")
-MaskImgDir=paste0(labelInput,"\\", "Mask_Image"); if (dir.exists(MaskImgDir)== F ) {dir.create(MaskImgDir)}
-maskDir=paste0(labelInput,"\\", "Mask_Image", "\\","Mask") ;if (dir.exists(maskDir)== F ) {dir.create(maskDir)}
-imgDir=paste0(labelInput,"\\Mask_Image\\Image");if (dir.exists(imgDir)== F ) {dir.create(imgDir)}
-TablePoints=read.csv(paste0(labelInput, "\\",date1, "Points.csv"))
-pthImg=paste0(labelInput,"\\",date1, "_CountDist.csv")
-TableImg=read.csv(pthImg)
+date1=substr(basename(labelInput),1,15)
+
+HauloutDir=paste0(labelInput, "\\", "Predict", "\\","PUP")
+
+MaskImgDir=paste0(labelInput,"\\", "Mask_Image_PUP"); if (dir.exists(MaskImgDir)== F ) {dir.create(MaskImgDir)}
+maskDir=paste0(labelInput,"\\", "Mask_Image_PUP", "\\","Mask") ;if (dir.exists(maskDir)== F ) {dir.create(maskDir)}
+imgDir=paste0(labelInput,"\\Mask_Image_PUP\\Image");if (dir.exists(imgDir)== F ) {dir.create(imgDir)}
+
+TablePointsPTH=paste0(labelInput,"\\Predict\\Pup_PointsOnImg_",date1,".csv")
+TablePoints=read.csv(TablePointsPTH)
+#pthImg=paste0(labelInput,"\\",date, "_CountDist.csv")
+#TableImg=read.csv(pthImg)
 ######################################################################################################## CREATE MASK WITH POINTS
-TableImg=TableImg[TableImg$All512>0,]
-imgList=unique(TableImg$link)
-imgList=imgList[is.na(imgList) ==F]
+#TableImg=TableImg[TableImg$All512>0,]
+#imgList=unique(TableImg$link)
+#imgList=imgList[is.na(imgList) ==F]
+imgList=unique(TablePoints$X)
 
-
+cl <- makePSOCKcluster(detectCores (logical=F)) 
+clusterEvalQ(cl, {	
+  library(magick)
+  library(EBImage)
+})
+registerDoParallel(cl)
+#foreach(i = 1:length(imgList)) %dopar% {	
    for (i in 1:length(imgList)) {
-  img=imgList[i]
-     points=  data.frame(TablePoints[TablePoints$link==img,])
+     
+	 img=imgList[i]
+     points=  data.frame(TablePoints[TablePoints$X==img,])
      lat=points$lat
      lon=points$lon
-     xlim <<-unique(c(points$west50,points$east50))
-     ylim <<-unique(c(points$south50,points$north50))
-# cex=  paste0(points$sex)
-#    if (Species =="WLRS") {cex=0.6} else {
-#  cex=  gsub("An", "1.5", cex) 
-#  cex=  gsub("TN", "1.5", cex) 
-#  cex=  gsub("TF", "1.5", cex) 
-#  cex=  gsub("Sa", "0.9", cex)
-#  cex=  gsub("SA", "0.9", cex)
-#  cex=  gsub("AF",  "0.7", cex)
-#  cex=  gsub("F",  "0.7", cex) 
-# cex=  gsub("J",  "0.7", cex) 	
-#  cex=  gsub("U",  "0.6", cex)
-#  cex=  gsub("P",  "0.25", cex)         }
-#  cex=as.numeric(cex)
-cex=0.25
+     xlim <<-unique(c(points$west,points$east))
+     ylim <<-unique(c(points$south,points$north))
+	 
+
+   cex=0.25
+
+ 
   ###################
-  fig <- image_graph(width = 1084, height = 1084, res =720)
+  fig <- image_graph(width = 542, height = 542, res =720)
   par(mai=c(0,0,0,0),bg=NA,fig=c(0,1,0,1),bty ="n")
   
   plot(lat,lon,xlim=xlim,ylim=ylim, col="red",
        pch=16,cex=cex,bg=16,axes=F,frame.plot=F, ann=F, xaxt='n', yaxt='n')
 	   dev.off()
-       fig=image_crop(fig,"1024x1024+30+30+30+30")
+       fig=image_crop(fig,"1024x1024+15+15+15+15")
 
    #imgN=gsub("png","gif", img)
-  pathImgSave=paste0(maskDir, "\\", date1, "_",img)
+  pathImgSave=paste0(maskDir, "\\",img)
   pathImgSave=gsub("jpg","png",pathImgSave)
   image_write(fig, path = pathImgSave, format = "png")   
 }
@@ -108,4 +110,7 @@ Msk= readImage(listMsk[i])
   
   
   
+
+stopCluster(cl)
+
 

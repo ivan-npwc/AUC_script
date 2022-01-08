@@ -1,0 +1,87 @@
+library(magick)
+library(tools)
+#split into 4 images from one 
+
+ labelInput= "E:\\2021_19_OPP\\20210728_105310_DKV1996"
+ date1=substr(basename(labelInput),1,15)
+ 
+ imgDirFROM=    paste0(labelInput,"\\Mask_Image\\Image")
+ maskDirFROM=   paste0(labelInput,"\\Mask_Image\\Mask")
+ 
+ imgDirTo=    paste0(labelInput,"\\Mask_Image\\Image_PUP");dir.create(imgDirTo,showWarnings=F)
+ maskDirTo=   paste0(labelInput,"\\Mask_Image\\Mask_PUP");dir.create(maskDirTo,showWarnings=F)
+ 
+
+ listBigMsk=list.files(maskDirFROM, full.names=T)
+ 
+#####################
+coordCrop1=paste0("512x512+128+128")
+coordCrop2=paste0("512x512+384+128")
+coordCrop3=paste0("512x512+128+384")
+coordCrop4=paste0("512x512+384+384")
+######################
+  
+ 
+ 
+ cl <- makePSOCKcluster(detectCores (logical=FALSE)) 
+   
+    clusterEvalQ(cl, {
+      library(magick)	 
+	  library(tools)
+    })
+    registerDoParallel(cl)
+  foreach(i = 1:length(listBigMsk)) %dopar% {	
+  #   for (i in 1: length(listBigMsk)) {
+ 
+ 
+ Crop1=NULL
+ Crop2=NULL
+ Crop3=NULL
+ Crop4=NULL
+ 
+ 
+  mskP=listBigMsk[i]
+  Nm= file_path_sans_ext(basename(mskP))
+  ############################################# mask
+  BgMsk=image_read(mskP)
+ 
+  Crop1=image_crop(BgMsk,coordCrop1)
+  Crop2=image_crop(BgMsk,coordCrop2)
+  Crop3=image_crop(BgMsk,coordCrop3)
+  Crop4=image_crop(BgMsk,coordCrop4)
+  
+  pthSave1=paste0(maskDirTo,"\\1#",Nm,".png")
+  pthSave2=paste0(maskDirTo,"\\2#",Nm,".png")
+  pthSave3=paste0(maskDirTo,"\\3#",Nm,".png")
+  pthSave4=paste0(maskDirTo,"\\4#",Nm,".png")
+  
+  image_write(Crop1,pthSave1,format="png")
+  image_write(Crop2,pthSave2,format="png")
+  image_write(Crop3,pthSave3,format="png")
+  image_write(Crop4,pthSave4,format="png")
+  
+  ################################################## image
+ imgP=paste0(imgDirFROM,"\\",Nm,".jpg")
+ 
+  BgImg=image_read(imgP)
+ 
+  Crop1=image_crop(BgImg,coordCrop1)
+  Crop2=image_crop(BgImg,coordCrop2)
+  Crop3=image_crop(BgImg,coordCrop3)
+  Crop4=image_crop(BgImg,coordCrop4)
+  
+  pthSave1=paste0(imgDirTo,"\\1#",Nm,".jpg")
+  pthSave2=paste0(imgDirTo,"\\2#",Nm,".jpg")
+  pthSave3=paste0(imgDirTo,"\\3#",Nm,".jpg")
+  pthSave4=paste0(imgDirTo,"\\4#",Nm,".jpg")
+  
+  image_write(Crop1,pthSave1,format="jpg")
+  image_write(Crop2,pthSave2,format="jpg")
+  image_write(Crop3,pthSave3,format="jpg")
+  image_write(Crop4,pthSave4,format="jpg")
+ 
+
+ 
+  }
+  
+   stopCluster(cl)
