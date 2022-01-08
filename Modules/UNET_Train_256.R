@@ -35,6 +35,7 @@ library(doParallel)
 library(foreach)
 #library(tensorflow)
 library(keras)
+library(tools)
 
 #use_condaenv("r-tensorflow")
 #sess = tf$Session()
@@ -51,14 +52,14 @@ images_dir= paste0(trainDir1, "\\Image")
 masks_dir= paste0(trainDir1, "\\Mask")
 
      listImgS <<- list.files(images_dir)
-	 ImgsExten=extension(listImgS)[1]
-	 listImgSNoExt=substr(listImgS,1,nchar(listImgS)-nchar(ImgsExten))
+
+	 listImgSNoExt=file_path_sans_ext(listImgS)
 	 
 	                   if (length(listImgS)==0) {stop ("No Images found")}
 	  
      ListMskS<<- list.files(masks_dir)
-	 MskExten=extension(ListMskS)[1]
-	 MskNoExt=substr(ListMskS,1,nchar(ListMskS)-nchar(MskExten))
+	
+	 MskNoExt=file_path_sans_ext(ListMskS)
 
      deleteListImgs<<- listImgSNoExt[!(listImgSNoExt %in% MskNoExt)] # here is IMGS DELETE without msk 
      deleteListMsks<<- MskNoExt[!(MskNoExt %in% listImgSNoExt)]
