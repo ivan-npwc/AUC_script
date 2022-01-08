@@ -1,6 +1,6 @@
 
 
-                      trainDir1= "C:\\SSL_DB\\TRAIN\\NFS_Pup"
+                      trainDir1= "C:\\SSL_DB\\TRAIN\\NFS_Pup\\NewData"
                      #  weight1=Weight
                        Model_base="C:\\SSL_DB\\TRAIN\\NFS_Pup\\Checkpoints\\Val_0.33_epoch_01_512.h5"
 					   TrainIndex=0.9

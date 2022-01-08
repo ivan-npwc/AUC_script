@@ -1,28 +1,16 @@
-#UnetTrain256=function (
-#                      trainDir1=trainDir,
-#                       weight1=Weight,
-#                       Model_base1=Model_base, #"D:\\CIC\\SHINY_NFS_AUTOCOUNT\\20190505\\data\\TRAIN\\Val_0.43_epoch_16_NFS_256_Points.h5",
-#					   TrainIndex=0.85,  # how many data use for train and validate (1-TrainIndex)
-#					   BatchIntens= BatchIntens1,  # all train set will be procesing in one epoch 3 times
-#					   Split=Split1,	        # if split for train and validate
-#					   Smooth=1,       # smoth for accuracy model estimate  
-#					   batch_size=batch_size1,
-#					   epochs=epochs1,
-#					   dfrmn=F
-#					   ) {
-		
 
-                      trainDir1=trainDir
-                       weight1=Weight
-                       Model_base1=Model_base
+
+                      trainDir1= "C:\\SSL_DB\\TRAIN\\NFS_Pup"
+                     #  weight1=Weight
+                       Model_base="C:\\SSL_DB\\TRAIN\\NFS_Pup\\Checkpoints\\Val_0.33_epoch_01_512.h5"
 					   TrainIndex=0.9
-					   BatchIntens= BatchIntens1
+					   BatchIntens= 1
 					   Split= T  #Split1
 					   Smooth=1 
-					   batch_size=batch_size1
-					   epochs=epochs1
+					   batch_size=8
+					   epochs=4
 					   dfrmn=F
-                      TypeTrain
+                      TypeTrain="NewTrain"
 
 			 
 
@@ -36,6 +24,7 @@ library(foreach)
 #library(tensorflow)
 library(keras)
 library(tools)
+
 
 #use_condaenv("r-tensorflow")
 #sess = tf$Session()
@@ -52,7 +41,7 @@ images_dir= paste0(trainDir1, "\\Image")
 masks_dir= paste0(trainDir1, "\\Mask")
 
      listImgS <<- list.files(images_dir)
-
+	
 	 listImgSNoExt=file_path_sans_ext(listImgS)
 	 
 	                   if (length(listImgS)==0) {stop ("No Images found")}
@@ -64,8 +53,8 @@ masks_dir= paste0(trainDir1, "\\Mask")
      deleteListImgs<<- listImgSNoExt[!(listImgSNoExt %in% MskNoExt)] # here is IMGS DELETE without msk 
      deleteListMsks<<- MskNoExt[!(MskNoExt %in% listImgSNoExt)]
    
-     deleteListImgs1=paste0(images_dir,"\\",deleteListImgs,".jpg")
-     deleteListMsk1=paste0(masks_dir,"\\",deleteListMsks,".png")
+     deleteListImgs1=paste0(images_dir,"\\",deleteListImgs,ImgsExten)
+     deleteListMsk1=paste0(masks_dir,"\\",deleteListMsks,MskExten)
 	 unlink(deleteListImgs1)
 	 unlink(deleteListMsk1)
 
@@ -105,10 +94,11 @@ bce_dice_loss <- function(y_true, y_pred) {
   return(result)
 }
 ########
-if ( exists("unet1")==F){source("Modules/UnetVGG16Create.r")}
+#if ( exists("unet1")==F){source("Modules/UnetVGG16Create.r")}
 if(TypeTrain=="Retrain"){setWEight=readRDS(weight1); set_weights(unet1,setWEight)}
 
-
+unet1 <- load_model_hdf5(Model_base, custom_objects = c(dice_coef = dice_coef,
+                                                        dice_coef_loss=dice_coef_loss))
 														
 														
 unet1 <- unet1 %>%
@@ -123,7 +113,7 @@ unet1
 ###########
 early_stopping <- callback_early_stopping(patience = 4)
 #filepath <<- file.path(checkpoint_dir, "Val_{val_dice_coef:.2f}_epoch_{epoch:02d}_256.h5")
-BaseName <<- basename(file.path(checkpoint_dir, "Val_{val_dice_coef:.2f}_epoch_{epoch:02d}_256.h5"))
+BaseName <<- basename(file.path(checkpoint_dir, "Val_{val_dice_coef:.2f}_epoch_{epoch:02d}_512.h5"))
 filepath <<- paste0(checkpoint_dir,"\\",Species,"_",dateTrain,"_",BaseName)
 
 cp_callback <- callback_model_checkpoint( 
@@ -135,8 +125,8 @@ cp_callback <- callback_model_checkpoint(
 #########################################################################
 imagesRead <- function(image_file,
                        mask_file,
-                       target_width = 256, 
-                       target_height = 256) {
+                       target_width = 512, 
+                       target_height = 512) {
   img <- image_read(image_file)
   img <- image_scale(img, paste0(target_width, "x", target_height, "!"))
   
@@ -184,16 +174,16 @@ randomHorizontalFlipDEf <- function(img, mask,dfrmn=F) {
 }
 #######################################################
 img2arr <- function(image, 
-                    target_width = 256,
-                    target_height = 256) {
+                    target_width = 512,
+                    target_height = 512) {
   result <- aperm(as.numeric(image[[1]])[, , 1:3], c(2, 1, 3)) # transpose
   dim(result) <- c(1, target_width, target_height, 3)
   return(result)
 }
 #########################################################
 mask2arr <- function(mask,
-                     target_width = 256,
-                     target_height = 256) {
+                     target_width = 512,
+                     target_height = 512) {
   result <- t(as.numeric(mask[[1]])[, , 1]) # transpose
   dim(result) <- c(1, target_width, target_height, 1)
   return(result)
@@ -319,8 +309,8 @@ clusterEvalQ(cl, {
   
   imagesRead <- function(image_file,
                          mask_file,
-                         target_width = 256, 
-                         target_height = 256) {
+                         target_width = 512, 
+                         target_height = 512) {
     img <- image_read(image_file)
     img <- image_scale(img, paste0(target_width, "x", target_height, "!"))
     
@@ -369,16 +359,16 @@ randomHorizontalFlipDEf <- function(img, mask,dfrmn=F) {
   #########################################################################
   
   img2arr <- function(image, 
-                      target_width = 256,
-                      target_height = 256) {
+                      target_width = 512,
+                      target_height = 512) {
     result <- aperm(as.numeric(image[[1]])[, , 1:3], c(2, 1, 3)) # transpose
     dim(result) <- c(1, target_width, target_height, 3)
     return(result)
   }
   
   mask2arr <- function(mask,
-                       target_width = 256,
-                       target_height = 256) {
+                       target_width = 512,
+                       target_height = 512) {
     result <- t(as.numeric(mask[[1]])[, , 1]) # transpose
     dim(result) <- c(1, target_width, target_height, 1)
     return(result)

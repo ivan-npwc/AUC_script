@@ -64,8 +64,8 @@ masks_dir= paste0(trainDir1, "\\Mask")
      deleteListImgs<<- listImgSNoExt[!(listImgSNoExt %in% MskNoExt)] # here is IMGS DELETE without msk 
      deleteListMsks<<- MskNoExt[!(MskNoExt %in% listImgSNoExt)]
    
-     deleteListImgs1=paste0(images_dir,"\\",deleteListImgs,".jpg")
-     deleteListMsk1=paste0(masks_dir,"\\",deleteListMsks,".png")
+     deleteListImgs1=paste0(images_dir,"\\",deleteListImgs,ImgsExten)
+     deleteListMsk1=paste0(masks_dir,"\\",deleteListMsks,MskExten)
 	 unlink(deleteListImgs1)
 	 unlink(deleteListMsk1)
 

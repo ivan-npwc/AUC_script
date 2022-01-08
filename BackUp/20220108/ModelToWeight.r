@@ -7,7 +7,7 @@ ModelConvert=file.choose()
 filepathRDS=tools::file_path_sans_ext(ModelConvert)
 K <- backend()
 
-dice_coef <- function(y_true, y_pred, smooth = 1) {
+dice_coef <- function(y_true, y_pred, smooth = Smooth) {
   y_true_f <- k_flatten(y_true)
   y_pred_f <- k_flatten(y_pred)
   intersection <- k_sum(y_true_f * y_pred_f)
