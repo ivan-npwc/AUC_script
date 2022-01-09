@@ -26,10 +26,6 @@ dice_coef <-
 
 }	  
 	dice_coef_loss <- function(y_true, y_pred) -dice_coef(y_true, y_pred)
-	
-	###################################################################
-	attr(dice_coef_loss, "py_function_name") <- "dice_coef_loss"
-   attr(dice_coef, "py_function_name") <- "dice_coef"
 ######################################################################
 unet_layer <- function(object, filters, kernel_size = c(3, 3),
                        padding = "same", kernel_initializer = "he_normal",

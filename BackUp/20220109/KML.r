@@ -30,9 +30,9 @@ source("Modules/KMLwrite_function.r")
 	 
    
  if (Species =="NFSAdult") {BlobFemaleLimit=410}
- 
+  if (Species =="NFSAdult") {BlobFemaleLimit=40}
  if (Species =="SSLAdult") {BlobFemaleLimit=1200}
- if (Species =="NFSPup") {BlobFemaleLimit=100}
+ if (Species =="NFSPup") {BlobFemaleLimit=0}
  if (Species =="WLRS") {BlobFemaleLimit=40}
  if (Species == "SSLPup") {BlobFemaleLimit=0}
   if (Species == "LRG") {BlobFemaleLimit=600}  # 900- junior
@@ -134,15 +134,11 @@ RP=Pointsfilter(tble=dat3,pthPolygon=Rookery_polygon)
 ################################################################################################################# ROOKERY SSL NFS PUP   
    if (Species %in% c("SSLPup","NFSPup")   & length(Rookery_polygon) != 0) {
    PupPoints=Pointsfilter(tble=dat3,pthPolygon=Rookery_polygon) 
-   PupPoints1=data.frame(area=PupPoints$area,lat= PupPoints$lon ,lon=PupPoints$lat)
-   for (k  in 1:length(PupPoints1$area)) {
-     if (PupPoints1$area[k] <= BlobFemaleLimit)  {PupPoints1$age[k]="P"}
-     if (PupPoints1$area[k] > BlobFemaleLimit)   {PupPoints1$age[k]="Error"} 
-	 }
-    
+   PupPoints$age="P"
+   
    
  }
 ######################################################################################################### 	
-PointsToWrite=rbind(PointsHoulout2,RookeryPoints,PupPoints1)
+PointsToWrite=rbind(PointsHoulout2,RookeryPoints,PupPoints)
 KMLwrite(Img3=PointsToWrite,kmlPathSave=kmlPathSave)
 

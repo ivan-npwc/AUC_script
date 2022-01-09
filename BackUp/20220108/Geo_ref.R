@@ -16,7 +16,7 @@
   BlobTable<-read.csv(readPth)
 #  BlobTable=BlobTable[BlobTable$m.cx != 0,]
    
-  dimModel=256
+  dimModel=BlobTable$DimModel[1]
   indexImgSize=   1024/dimModel
   IndexBorderLeft=0.25*dimModel
   IndexBorderRight=0.75*dimModel

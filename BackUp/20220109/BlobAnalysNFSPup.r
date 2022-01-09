@@ -1,9 +1,5 @@
 
      Species
-	 labelInput
-	 
-	 if (Species=="NFSPup") {source("Modules/BlobAnalysNFSPup.r")} else {
-	 
      predsDir=paste0(labelInput,"\\Predict\\Preds")
      listPreds=list.files(predsDir,full.names=T,pattern=Species)  
      date1=substr(basename(labelInput),1,15)
@@ -11,7 +7,7 @@
 	 
 	 
 	 
- 
+
 	 
 	 
   for (f in 1:length(listPreds)) {
@@ -69,4 +65,4 @@ if (is.null(resultBlob_tmp)==F){resultBlob=rbind(resultBlob,resultBlob_tmp)}
             resultBlob$DimModel=dimModel[1]
 		   write.csv(resultBlob,pth_resultBlob,row.names = F)
 		  
-   }   
+      
