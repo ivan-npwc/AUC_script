@@ -74,7 +74,7 @@ imgOrig[32:224,32:224]=ImgBig1
      img = getFrame(img0, 1)
        nmask = thresh(img, 18, 18, 0.009)  
        nmask1 <- fillHull(nmask)
-       nmask2 = opening(nmask1, makeBrush(4,shape='disc') ) # shape='Gaussian', sigma=50
+       nmask2 = opening(nmask1, makeBrush(5,shape='disc') ) # shape='Gaussian', sigma=50
        nmask3 = fillHull(nmask2)
        nmask4 = bwlabel(nmask3)
 	   

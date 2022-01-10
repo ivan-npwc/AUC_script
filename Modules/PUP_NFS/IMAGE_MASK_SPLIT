@@ -2,14 +2,14 @@ library(magick)
 library(tools)
 #split into 4 images from one 
 
- labelInput= "E:\\2021_19_OPP\\20210728_105310_DKV1996"
+ labelInput= "E:\\2021_19_OPP\\20210729_113132_DKV1996"
  date1=substr(basename(labelInput),1,15)
  
- imgDirFROM=    paste0(labelInput,"\\Mask_Image\\Image")
- maskDirFROM=   paste0(labelInput,"\\Mask_Image\\Mask")
+ imgDirFROM=    paste0(labelInput,"\\Error_NFSAdult\\Image")
+ maskDirFROM=   paste0(labelInput,"\\Error_NFSAdult\\Mask")
  
- imgDirTo=    paste0(labelInput,"\\Mask_Image\\Image_PUP");dir.create(imgDirTo,showWarnings=F)
- maskDirTo=   paste0(labelInput,"\\Mask_Image\\Mask_PUP");dir.create(maskDirTo,showWarnings=F)
+ imgDirTo=    paste0(labelInput,"\\Error_NFSAdult\\Image_PUP");dir.create(imgDirTo,showWarnings=F)
+ maskDirTo=   paste0(labelInput,"\\Error_NFSAdult\\Mask_PUP");dir.create(maskDirTo,showWarnings=F)
  
 
  listBigMsk=list.files(maskDirFROM, full.names=T)
@@ -23,15 +23,15 @@ coordCrop4=paste0("512x512+384+384")
   
  
  
- cl <- makePSOCKcluster(detectCores (logical=FALSE)) 
-   
-    clusterEvalQ(cl, {
-      library(magick)	 
-	  library(tools)
-    })
-    registerDoParallel(cl)
-  foreach(i = 1:length(listBigMsk)) %dopar% {	
-  #   for (i in 1: length(listBigMsk)) {
+# cl <- makePSOCKcluster(detectCores (logical=FALSE)) 
+#   
+#    clusterEvalQ(cl, {
+#      library(magick)	 
+#	  library(tools)
+ #   })
+ #   registerDoParallel(cl)
+ # foreach(i = 1:length(listBigMsk)) %dopar% {	
+     for (i in 1: length(listBigMsk)) {
  
  
  Crop1=NULL

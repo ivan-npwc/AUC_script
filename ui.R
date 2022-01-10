@@ -23,6 +23,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
 														  "01_Unzip"="Unzip",
                                                           "02_KMLprepare"="KMLprepare",
                                                           "03_Image_prepare"="Image_prepare",
+														  "03.1_IMAGE_SPLIT"="IMAGE_SPLIT",										  
                                                           "04_Unet"="Unet",
                                                           "05_Blob_analisis"="BlobAnalys",
                                                           "06_Geo_ref"="Geo_ref",
