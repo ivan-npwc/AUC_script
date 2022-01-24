@@ -23,15 +23,15 @@ coordCrop4=paste0("512x512+384+384")
   
  
  
-# cl <- makePSOCKcluster(detectCores (logical=FALSE)) 
-#   
-#    clusterEvalQ(cl, {
-#      library(magick)	 
-#	  library(tools)
- #   })
- #   registerDoParallel(cl)
- # foreach(i = 1:length(listBigMsk)) %dopar% {	
-     for (i in 1: length(listBigMsk)) {
+ cl <- makePSOCKcluster(detectCores (logical=FALSE)) 
+   
+    clusterEvalQ(cl, {
+      library(magick)	 
+	  library(tools)
+    })
+    registerDoParallel(cl)
+  foreach(i = 1:length(listBigMsk)) %dopar% {	
+ #    for (i in 1: length(listBigMsk)) {
  
  
  Crop1=NULL

@@ -43,7 +43,7 @@ library(tools)
 library(EBImage)
 
 
-dirMsk="D:\\AUC_data\\NFS_Pup\\NewData\\Mask"
+dirMsk= "D:\\AUC_data\\NFS_Pup\\NewData\\Mask_PUP"
 
 listMskTo=list.files(dirMsk,full.names=T)
 
@@ -58,7 +58,7 @@ cl <- makePSOCKcluster(detectCores (logical=FALSE))
     registerDoParallel(cl)
   foreach(i = 1:length(listMskTo)) %dopar% {	
 
-for (i in 1:length(listMskTo)) {
+#for (i in 1:length(listMskTo)) {
 msk=readImage(listMskTo[i])
 colorMode(msk)=Grayscale
 

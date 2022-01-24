@@ -1,4 +1,4 @@
-
+if (Species== "NFSPup1") { source("Modules/UnetBlobAnalisNFSPup.r") } else {
                      labelInput 
                      Species
                      batch_size_global=  600
@@ -124,8 +124,15 @@ if (ModelCheckAlg==T) { PTHweight <- PTHweightCHECK}
     ############
 	pthSavePreds=paste0(predsDir,"\\Preds_",Species,"_",e)
 	Preds1=list(preds=preds,DimPreds=dim(preds),dimModel=dimModel,listImageBl=listImageBl)
+	
+	
+	
+	
+	
 	saveRDS(Preds1,pthSavePreds)
+	print(paste0(e," in  ",global_steps))
 }
 stopCluster(cl)
 
 
+}
