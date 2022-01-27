@@ -8,12 +8,10 @@ Age_Pred_Fun=function(
 	trgt_size = 256,
 	type,
 	check=F,
-	R_mdlBSAgePTH = paste0(System_data,"/weights/SSL_AGE/SSLageBASE/J_F_An_Jan26 2022_loss_0.09_epoch_04.h5"),
-	H_mdlBSAgePTH = paste0(System_data,"/weights/SSL_AGE/SSLageBASE/Sa_P_J_An__20220127_loss_0.20_epoch_03.h5"),
-	
-	RookerytWeightPTH= paste0(System_data,"/weights/SSL_AGE/J_F_An_Jan26 2022_loss_009_epoch_04"),
-	HauloutWeightPTH=  paste0(System_data,"/weights/SSL_AGE/Sa_P_J_An__20220127_loss_020_epoch_03" )) {	
-
+	modelBASEAgePTH <<-       paste0(System_data,"/weights/SSL AGE/ROOKERY SSLAdult_Feb 19  2021_Val_0.89_epoch_01.h5"),
+	RookerytWeightPTH<<-    paste0(System_data,"/weights/SSL AGE/SSLageROOKERYweight"),
+	HauloutWeightPTH<<-     paste0(System_data,"/weights/SSL AGE/SSLageHAULOUTweight" )) {	
+	#"C:\\SSL_DB\\AUC_script\\System data\\weights\\SSL AGE\\SSLageHAULOUTweight"
 	
 	library(abind)
     library(reticulate)
@@ -24,14 +22,14 @@ Age_Pred_Fun=function(
     library(keras)
 	library(magick) 
 	date1=substr(basename(labelInput),1,15)
+	if(exists("modelAge")==F){modelAge=load_model_hdf5(modelBASEAgePTH)}
 	
-	if(exists("RmodelAge")==F){RmodelAge=load_model_hdf5(R_mdlBSAgePTH)}
-	if(exists("HmodelAge")==F){HmodelAge=load_model_hdf5(H_mdlBSAgePTH)}
-	
-if (type=="Rookery"){		  
+if (type=="Rookery"){
+     #     modelAgePTH =    "C:\\SSL_DB\\SSL_age\\Checkpoints\\SSLAdult_Feb 19  2021_Val_0.89_epoch_01.h5"
+		 # modelAge=load_model_hdf5(modelAgePTH)
+		  
 		  RookerytWeight=readRDS(RookerytWeightPTH)
-		  set_weights(RmodelAge,RookerytWeight)
-		  modelAge=RmodelAge
+		  set_weights(modelAge,RookerytWeight)
 	      Age_Name= c("TF","F", "J")      		
           pth<<- paste0(labelInput,"\\Predict\\Age_predict\\Rookery")
 	      PthTblAgeRef=paste0(labelInput,"\\Predict\\",date1,"_", Species,"AgeRef.csv")
@@ -40,11 +38,13 @@ if (type=="Rookery"){
 	     # ProbAge_PTH=paste0(labelInput,"\\Predict\\",basename(labelInput),"_", Species,"_ProbAge.csv")      
   }
 ############################################################################
-if (type=="Haulout"){  
+if (type=="Haulout"){
+      #  modelAgePTH =    "C:\\SSL_DB\\SSL_age\\HAULOUT\\Checkpoints\\SSLAdult_Feb 22  2021_Val_0.92_epoch_02.h5"
+		# modelAge=load_model_hdf5(modelAgePTH)
+	     
 		  HauloutWeight=readRDS(HauloutWeightPTH)
-		  set_weights(HmodelAge,HauloutWeight)
-		  modelAge=HmodelAge
-	      Age_Name= c("An","J","P", "Sa")      		
+		  set_weights(modelAge,HauloutWeight)
+	      Age_Name= c("An","J", "Sa")      		
           pth<<- paste0(labelInput,"\\Predict\\Age_predict\\Haulout")
 	      PthTblAgeRef=paste0(labelInput,"\\Predict\\",date1,"_", Species,"AgeRef.csv")
 	      PTH_TableGeoAge =paste0(labelInput,"\\Predict\\",date1,"_", Species,"_HAULOUT.csv")

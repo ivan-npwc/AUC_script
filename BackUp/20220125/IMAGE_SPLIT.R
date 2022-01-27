@@ -4,7 +4,7 @@ if (!require("foreach")) {install.packages("foreach"); library("foreach")}
 library(tools)
 library(EBImage)
 
- labelInput  
+ labelInput   # "E:\\2021_19_OPP\\20210728_105310_DKV1996"
  date1=substr(basename(labelInput),1,15)
  
  BigImgDir=paste0(labelInput, "\\", "Predict", "\\","Haulout")
