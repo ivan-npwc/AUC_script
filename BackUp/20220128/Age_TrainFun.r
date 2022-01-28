@@ -1,9 +1,9 @@
           library(keras)
 		  library(magick)
-							 train_Gen_dir= "C:\\Users\\usato\\TRAIN\\F-SA" 
+							 train_Gen_dir= "C:\\Users\\usato\\TRAIN\\HAULOUT" 
 							  ImgCountNormise=F
 							  NewModelCreate=T
-							  BaseModel_pth =  "C:\\Users\\usato\\TRAIN\\F-SA\\Checkpoints\\_NA__20220128_loss_0.43_epoch_05.h5"
+							  BaseModel_pth =  "RookerySSLAge.h5"
 							 # Species="SSL_age_rookery"
 							  bth_size =64
 							  trgt_size =256
@@ -194,7 +194,6 @@ model_brand_read=load_model_hdf5(BaseModel_pth)
 						optimizer =    optimizer_adam(lr= 0.0001 , decay = 1e-6 ), #"rmsprop",  #
 						loss = "categorical_crossentropy",
 						metrics = c("accuracy"))
-						
 	 model_brand_read %>% fit(
 	  train_generator,
 	  steps_per_epoch = train_step,

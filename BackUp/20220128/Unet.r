@@ -1,23 +1,18 @@
-
-                    library(tools)
-             		labelInput 
+if (Species== "NFSPup1") { source("Modules/UnetBlobAnalisNFSPup.r") } else {
+                     labelInput 
                      Species
                      batch_size_global=  600
                      batch_size =60
                      date1=substr(basename(paste0(labelInput)),1,15)
-					 predict_dir=paste0(labelInput,"\\Predict\\PUP")
-					 pth_resultBlob <<- paste0(labelInput,"\\Predict\\",Species,"_BlobTable_", date1, ".csv") 
-                     pth_resultBlob_tmp <<-paste0(labelInput,"\\Predict\\",Species, "_BlobTable_", date1, "_tmp.csv")
-			
-                     resultBlob_tmp=NULL
-                     resultBlob=NULL
-					 
+					 predict_dir=paste0(labelInput,"\\Predict\\Haulout")
 ##############################################################################################################################
-
-
-if (Species== "NFSPup") { PTHweight=NFS_Pup_weight_pth}
+if (Species== "NFSAdult") {PTHweight=NFS_Adult_weight_pth }		
+if (Species== "SSLAdult") {PTHweight=SSL_Adult_weight_pth}	
+if (Species== "NFSPup") { PTHweight=NFS_Pup_weight_pth; predict_dir=paste0(labelInput,"\\Predict\\PUP") }
 if (Species== "SSLPup") { PTHweight=SSL_Pup_weight_pth}
-
+if (Species== "LRG") {PTHweight=LRG_pth}
+if (Species== "WLRS" & Terrain =="Sand")   {PTHweight=WLRS_Sand_weight_pth}
+if (Species== "WLRS" & Terrain =="Rocky")   {PTHweight=WLRS_Rocky_weight_pth}
 
 
     PTHweight<-paste0(System_data,"/weights/",PTHweight)
@@ -48,9 +43,9 @@ if (ModelCheckAlg==T) { PTHweight <- PTHweightCHECK}
   shape=layer_output$shape								 
   dimModel<<-c(paste0(shape[2]),paste0(shape[2]))								 
   
-  
+  pth_resultBlob <<- paste0(labelInput,"\\Predict\\",Species,"_BlobTable_", date1, ".csv") 
+  pth_resultBlob_tmp <<-paste0(labelInput,"\\Predict\\",Species, "_BlobTable_", date1, "_tmp.csv")
   listImage_glob <<-list.files(predict_dir, full.names = T,  recursive = T, include.dirs = F,pattern="png|JPG|jpg|jpeg")
-  if (length(listImage_glob)==0){stop("No Images For Predict Found")}
   global_steps <<- round(length(listImage_glob)/batch_size_global)
   if(length(listImage_glob) > (global_steps*batch_size_global)) {global_steps=global_steps+1}
  ###################################################### 
@@ -61,7 +56,6 @@ if (ModelCheckAlg==T) { PTHweight <- PTHweightCHECK}
       library(reticulate)
       library(EBImage)
      library(keras)
-	  library(tools)
  
       imageRead <- function(image_file,
 	                        dimModel1
@@ -131,79 +125,14 @@ if (ModelCheckAlg==T) { PTHweight <- PTHweightCHECK}
 	pthSavePreds=paste0(predsDir,"\\Preds_",Species,"_",e)
 	Preds1=list(preds=preds,DimPreds=dim(preds),dimModel=dimModel,listImageBl=listImageBl)
 	
-	 PredsRDS=Preds1
-     dimPreds=PredsRDS$DimPreds
-	 preds=  PredsRDS$preds
-	# dim(preds)=c(dimPreds)
-  ###########
-     imgs= data.frame(tiles=basename(PredsRDS$listImageBl))
-	 imgs$imNoext=file_path_sans_ext(imgs$tiles)
-	 imgs$img= paste0(substr(imgs$imNoext,1,29),".jpg")   # 3,31
-	 imgs$Npreds=c(1:length(imgs$tiles))
-#############################
-listImgs=unique(imgs$img) 
-#########################################
-resultBlob_tmp <- foreach(i = 1:length(listImgs),.combine=rbind) %dopar% {
-#  for (i in 1: length (listImgs)) {
- #######################################
-  name=listImgs[i]
-  Npreds=imgs$Npreds[imgs$img==name]
-  ##############################crop1 
-  mask1=preds[Npreds[1], , ,]
-  Crop1=mask1[0:192,1:256]
-  ################################################crop2
-  mask2=preds[Npreds[2], , ,] 
-  Crop2=mask2[64:256,0:256]
-  ########
-Imgrow1=abind(Crop1,Crop2,along=1)
-#############################################cpop 3
-   mask3=preds[Npreds[3], , ,] 
-  Crop3=mask3[0:192,0:256]
-###########################################crop 4
-  mask4=preds[Npreds[4], , ,] 
-  Crop4=mask4[64:256,0:256]
-Imgrow2=abind(Crop3,Crop4,along=1)
-#####################
-ImgBig=abind(Imgrow1[,1:193],Imgrow2[,64:256],along=2)
-ImgBig1=resize(ImgBig,193,193)
-imgOrig=matrix(data=0, nrow = 256, ncol = 256)
-imgOrig[32:224,32:224]=ImgBig1
-########################################################################################################
-############################################################################################################ blob analis
-############################################################################################################
-     mask0=imgOrig
-    img0 <- t(mask0)
-     dim(img0) <- c(256, 256, 1)
-     img = getFrame(img0, 1)
-       nmask = thresh(img, 18, 18, 0.009)  
-       nmask1 <- fillHull(nmask)
-       nmask2 = opening(nmask1, makeBrush(4,shape='disc') ) # shape='Gaussian', sigma=50
-       nmask3 = fillHull(nmask2)
-       nmask4 = bwlabel(nmask3)
-	   
-         if (max(nmask4)!=0) {   
-            fts = computeFeatures.moment(nmask4)  # coordinat
-            shapeFeatures <- computeFeatures.shape(nmask4) # get radiuus, perimetr, area for a future IT IS MATERIAL FOR XGBOOST
-            BlobTable=data.frame(fts,shapeFeatures,img=name,img_pth=name) 
-           # resultBlob_tmp=rbind(resultBlob_tmp,BlobTable)			
+	
+	
+	
+	
+	saveRDS(Preds1,pthSavePreds)
+	print(paste0(e," in  ",global_steps))
 }
-##
-}
-print(paste0(e," in  ",global_steps))
-
-if (is.null(resultBlob_tmp)==F){resultBlob=rbind(resultBlob,resultBlob_tmp)
- write.csv(resultBlob,pth_resultBlob_tmp,row.names = F) 
- }
- 
-}
-            
-write.csv(resultBlob,pth_resultBlob,row.names = F)
-	
-	
-	
-	
-	#saveRDS(Preds1,pthSavePreds)
-	
 stopCluster(cl)
 
 
+}
