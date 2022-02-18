@@ -1,4 +1,7 @@
 source("Modules/KMLwrite_function.r")
+
+  library(dplyr)
+
 #library(spatialEco)	
                              clastering=F
 				#	if (Species=="WLRS"){clastering=T}		 
@@ -31,10 +34,10 @@ source("Modules/KMLwrite_function.r")
    
  if (Species =="NFSAdult") {BlobFemaleLimit=410}
  
- if (Species =="SSLAdult") {BlobFemaleLimit=1200}
+ if (Species =="SSLAdult") {BlobFemaleLimit=1200; limitSmallError=100}
  if (Species =="NFSPup") {BlobFemaleLimit=100}
  if (Species =="WLRS") {BlobFemaleLimit=40}
- if (Species == "SSLPup") {BlobFemaleLimit=0}
+ if (Species == "SSLPup") {BlobFemaleLimit=300; limitSmallError=100}
   if (Species == "LRG") {BlobFemaleLimit=600}  # 900- junior
 ####################################################################################################
 PointsHoulout2=NULL
@@ -121,6 +124,7 @@ RP=Pointsfilter(tble=dat3,pthPolygon=Rookery_polygon)
     proj4string(RP3) <- CRS(crs)
 	PH1=PH1[is.na(over(PH1,as(RP3,"SpatialPolygons"))),]
 	}
+if (length(PH1)>0){	
 	PH2=data.frame(PH1)
 	PointsHoulout2=data.frame(area=PH2$area,lat= PH2$lon ,lon=PH2$lat)
  #  if (Species=="WLRS"){PointsHoulout2$age="U";PointsHoulout2$area="U"} else {
@@ -131,15 +135,18 @@ RP=Pointsfilter(tble=dat3,pthPolygon=Rookery_polygon)
    }
 #   }
    }
+   }
 ################################################################################################################# ROOKERY SSL NFS PUP   
-   if (Species %in% c("SSLPup","NFSPup")   & length(Rookery_polygon) != 0) {
-   PupPoints=Pointsfilter(tble=dat3,pthPolygon=Rookery_polygon) 
+   if (Species %in% c("SSLPup","NFSPup") ) {
+   PupPoints=Pointsfilter(tble=dat3,pthPolygon=Haulout_polygon) 
    PupPoints1=data.frame(area=PupPoints$area,lat= PupPoints$lon ,lon=PupPoints$lat)
    for (k  in 1:length(PupPoints1$area)) {
      if (PupPoints1$area[k] <= BlobFemaleLimit)  {PupPoints1$age[k]="P"}
-     if (PupPoints1$area[k] > BlobFemaleLimit)   {PupPoints1$age[k]="Error"} 
+	 if (PupPoints1$area[k] <= 70)  {PupPoints1$age[k]="SmallError"}
+     if (PupPoints1$area[k] > BlobFemaleLimit)   {PupPoints1$age[k]="BigError"} 
 	 }
-    
+  
+ #  if (Species == "SSLPup") {PupPoints1=PupPoints1 %>% filter( area > limitSmallError)}
    
  }
 ######################################################################################################### 	
