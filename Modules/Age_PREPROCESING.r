@@ -32,8 +32,8 @@ Type= "Predict"  #"Train"
 	
 	DirRPol=paste0(labelInput,"\\Polygons\\Rookery");PthPolR=list.files(DirRPol,full.names=T, pattern=".shp")
 	PRJ="+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs"
-	if (length(PthPolR) !=0){RookeryPol=shapefile(PthPolR)}
-	proj4string(RookeryPol) <- PRJ
+	if (length(PthPolR) !=0){RookeryPol=shapefile(PthPolR);proj4string(RookeryPol) <- PRJ}
+	
     TblAgeRef=NULL
 	
 	#############################################################################################################
@@ -87,13 +87,17 @@ Type= "Predict"  #"Train"
 	PrdLocPnts <- SpatialPointsDataFrame(coords = coords,
                                         data = TblAgeRefNoLatLon, 
                                         proj4string = CRS(PRJ))  
+
+if (length(PthPolR) !=0){
 index= PrdLocPnts  %over%   RookeryPol
 index1=data.frame(index)
-
 index1[,1][is.na(index1[,1])==F]="Rookery"
 index1[,1][is.na(index1[,1])==T]="Haulout"
-
 PrdLocPnts$Rookery=index1[,1] 
+} else {PrdLocPnts$Rookery="Haulout"}
+
+
+
 TblAgeRef=PrdLocPnts
 TblAgeRef$pth_img=as.character(TblAgeRef$pth_img)
  for (i in 1:length(TblAgeRef[,1])) {
