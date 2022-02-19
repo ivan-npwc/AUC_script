@@ -1,4 +1,5 @@
 source("Modules/KMLwrite_function.r")
+DirRPol=paste0(labelInput,"\\Polygons\\Rookery");PthPolR=list.files(DirRPol,full.names=T, pattern=".shp")
 ##################################################################################
 Age_Pred_Fun=function(
     Species="SSLAdult",           
@@ -136,8 +137,10 @@ preds3<-finWrite
 }
 Age_Pred_Fun(type="Haulout")
 print("Haulout")
+if (length(PthPolR) !=0){
 Age_Pred_Fun(type="Rookery")
 print("Rookery")
+}
 #Age_Pred_Fun(type="F_Sa")
 #print("F_Sa")
 
