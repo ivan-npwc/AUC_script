@@ -1,18 +1,19 @@
 library(magick)
 library(tools)
-
+library(EBImage)
 if (!require("parallel")) {install.packages("parallel"); library("parallel")}
 if (!require("doParallel")) {install.packages("doParallel"); library("doParallel")}
 if (!require("foreach")) {install.packages("foreach"); library("foreach")}
 #split into 4 images from one 
 
-labelInput    #=  "D:\\AUC_data\\SSL_Pup"
+#labelInput=  "D:\\AUC_data\\SSL_Pup"
 
-imgDirFROM=    paste0(labelInput,"\\Image")
-maskDirFROM=   paste0(labelInput,"\\Mask")
+imgDirFROM=    paste0(labelInput,"\\Mask_Image\\Image")
+maskDirFROM=   paste0(labelInput,"\\Mask_Image\\Mask")
+smallMskImggDir =  paste0(labelInput,"\\Mask_Image_small");dir.create(smallMskImggDir,showWarnings=F)
 
-imgDirTo=    paste0(labelInput,"\\Image_smal");dir.create(imgDirTo,showWarnings=F)
-maskDirTo=   paste0(labelInput,"\\Mask_smal");dir.create(maskDirTo,showWarnings=F)
+imgDirTo=    paste0(smallMskImggDir,"\\Image_smal");dir.create(imgDirTo,showWarnings=F)
+maskDirTo=   paste0(smallMskImggDir,"\\Mask_smal");dir.create(maskDirTo,showWarnings=F)
 
 
 listBigMsk=list.files(maskDirFROM, full.names=T)
@@ -25,6 +26,7 @@ cl <- makePSOCKcluster(detectCores (logical=FALSE))
 clusterEvalQ(cl, {
   library(magick)	 
   library(tools)
+  library(EBImage)
 })
 registerDoParallel(cl)
 foreach(i = 1:length(listBigMsk)) %dopar% {	
