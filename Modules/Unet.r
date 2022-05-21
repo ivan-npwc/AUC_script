@@ -1,3 +1,4 @@
+is512=F
 if (Species== "NFSPup1") { source("Modules/UnetBlobAnalisNFSPup.r") } else {
                      labelInput 
                      Species
@@ -8,7 +9,8 @@ if (Species== "NFSPup1") { source("Modules/UnetBlobAnalisNFSPup.r") } else {
 ##############################################################################################################################
 if (Species== "NFSAdult") {PTHweight=NFS_Adult_weight_pth }		
 if (Species== "SSLAdult") {PTHweight=SSL_Adult_weight_pth}	
-if (Species== "NFSPup") { PTHweight=NFS_Pup_weight_pth; predict_dir=paste0(labelInput,"\\Predict\\PUP") }
+if (Species== "NFSPup"| is512==F) { PTHweight=NFS_Pup_weight_pth; predict_dir=paste0(labelInput,"\\Predict\\PUP")}
+if (Species== "NFSPup"| is512==T) { PTHweight=NFS_Pup_weight_pth_512}
 if (Species== "SSLPup") { PTHweight=SSL_Pup_weight_pth}
 if (Species== "LRG") {PTHweight=LRG_pth}
 if (Species== "WLRS" & Terrain =="Sand")   {PTHweight=WLRS_Sand_weight_pth}
@@ -24,7 +26,7 @@ if (ModelCheckAlg==T) { PTHweight <- PTHweightCHECK}
 ##############################################################################  
   
   if(exists("unet1")==F) {source("Modules/unetVGG16Create.r")}
-  
+  if(exists("unet1")==F | is512==T) {source("Modules/Unet512Create.r")}
    weight<<-readRDS(PTHweight)
    set_weights(unet1,weight)
    
