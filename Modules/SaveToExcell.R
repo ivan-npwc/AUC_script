@@ -6,7 +6,11 @@
 
    labelInput
    Species
+   ################
    
+   OPPdirName=basename(gsub(basename(labelInput),"",labelInput))
+   site=strsplit(OPPdirName,"_")[[1]][2]
+   ##############
     if (Species=="SSLPup")   {stop("You can not Import SSL pups without Adult animals, please select  SSLAdult")}
  
   ObserverPoints1=NULL
