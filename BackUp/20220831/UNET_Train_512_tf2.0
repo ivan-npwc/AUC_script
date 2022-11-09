@@ -1,0 +1,97 @@
+library(keras)
+library(tfdatasets)
+library(fs)
+
+
+Model_base="C:\\Users\\usato\\SSL_DB\\TRAIN\\NFS_Pup\\Checkpoints\\Val_0.33_epoch_01_512.h5"
+img_dir="C:\\Users\\usato\\SSL_DB\\TRAIN\\NFS_Pup\\Image"
+msk_dir="C:\\Users\\usato\\SSL_DB\\TRAIN\\NFS_Pup\\Mask"
+img_size <- c(512, 512)
+Smooth=1 
+num_val_samples <- 5000 
+btchSize=8
+epochs=7
+TypeTrain="NewTrain"#Retrain
+
+
+
+image_paths <- tibble::tibble(input = dir_ls(img_dir),target = dir_ls(msk_dir))
+
+tf_read_image <- 
+ function(path, format = "image", resize = NULL, ...) {
+ img <- path %>%
+ tf$io$read_file() %>%
+ tf$io[[paste0("decode_", format)]](...) 
+ if (!is.null(resize))
+ img <- img %>%
+ tf$image$resize(as.integer(resize)) 
+ img
+ }
+
+tf_read_image_and_resize <- function(..., resize = img_size)
+ tf_read_image(..., resize = resize)
+ ##############
+ make_dataset <- function(paths_df) {
+ tensor_slices_dataset(paths_df) %>%
+ dataset_map(function(path) { 
+ image <- path$input %>%
+ tf_read_image_and_resize("jpeg", channels = 3L) 
+ target <- path$target %>%
+ tf_read_image_and_resize("jpeg", channels = 1L) 
+ target <- target - 1 
+ list(image, target)
+ }) %>%
+ #dataset_cache() %>% 
+ dataset_shuffle(buffer_size = nrow(paths_df)) %>% 
+ dataset_batch(btchSize)
+}
+####
+val_idx <- sample.int(nrow(image_paths), num_val_samples)
+val_paths <- image_paths[val_idx,]
+train_paths <- image_paths[-val_idx,]
+validation_dataset <- make_dataset(val_paths) 
+train_dataset <- make_dataset(train_paths)
+########################################################################################
+K <- backend()
+dice_coef <- function(y_true, y_pred, smooth = Smooth) {
+  y_true_f <- k_flatten(y_true)
+  y_pred_f <- k_flatten(y_pred)
+  intersection <- k_sum(y_true_f * y_pred_f)
+  (2 * intersection + smooth) / (k_sum(y_true_f) + k_sum(y_pred_f) + smooth)
+}
+attr(dice_coef, "py_function_name") <- "dice_coef"
+
+dice_coef_loss <- function(y_true, y_pred) -dice_coef(y_true, y_pred)
+attr(dice_coef_loss, "py_function_name") <- "dice_coef_loss"
+
+####
+bce_dice_loss <- function(y_true, y_pred) {
+  result <- loss_binary_crossentropy(y_true, y_pred) +
+    (1 - dice_coef(y_true, y_pred))
+  return(result)
+}
+########
+unet1 <- load_model_hdf5(Model_base, custom_objects = c(dice_coef = dice_coef,
+                                                        dice_coef_loss=dice_coef_loss))
+if(TypeTrain=="Retrain"){setWEight=readRDS(weight1); set_weights(unet1,setWEight)}														
+														
+unet1 <- unet1 %>%
+        compile(
+        optimizer = optimizer_adam(lr= 0.0001 , decay = 1e-6 ),     #optimizer_nadam              
+        loss =   dice_coef_loss,    
+        metrics = c(dice_coef) 
+    )																																									
+unet1
+
+
+callbacks <- list(
+ callback_model_checkpoint("unet512NFSPup.keras",
+ save_best_only = F))
+ 
+ 
+history <- unet1 %>% fit(
+ train_dataset,
+ epochs = 50,
+ callbacks = callbacks,
+ validation_data = validation_dataset
+)

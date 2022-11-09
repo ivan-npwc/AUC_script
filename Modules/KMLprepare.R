@@ -17,6 +17,7 @@ GetTableKml= function(doc.kml) {
 }
 ############################################################
 listImg=function(KMLpath) { 
+options(warn=-1)
   list.of.mask <- list.files(KMLpath) 
   pathFolders=list.dirs(KMLpath,full.names = TRUE,recursive = F)
   KMLimg=NULL
@@ -33,6 +34,7 @@ if (length(geo.info[,1]) !=0) {
       KMLimg=rbind(KMLimg, data.frame(fLevelImgPath,geo.info,path))
     }}}
   KMLimg
+  options(warn=0)
 }
 ######################################################################
 KMLprepare=function () {
