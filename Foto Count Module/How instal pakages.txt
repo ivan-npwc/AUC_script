@@ -1,0 +1,4 @@
+Tools > NuGet Package Manager > Package Manager Console 
+
+image magick: Install-Package Magick.NET-Q16-x86 -Version 7.0.6.1002
+SQLite:Install-Package System.Data.SQLite -Version 1.0.105.2 

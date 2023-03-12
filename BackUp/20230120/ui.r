@@ -33,7 +33,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
                                                          
                                                           "--------------------------------------------"="B",
 														#  "09_LRG_Measurements_Prepare"="LRG_SplitPredByBlob",
-														  "10_LRG_Measurements_Predict"="LRG_PREDICT",
+														 # "10_LRG_Measurements_Predict"="LRG_PREDICT",
                               "09_SSL-NFS_Age_PREPROCESING"= "Age_PREPROCESING",
 														"09.1_NFS-SSL_split"="NFS-SSL split_VGG16",
 														  "09.2_Age_PREDICT_FALSE_POSITIVE"="Age_PREDICT_FALSE_POSITIVE",
@@ -77,7 +77,7 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
                                                         )),
                           column(width = 6, selectInput('OPPListPred', 'OPP List', width="1000px",multiple = T,
                                                         c("All",listOPP),
-							                            selected=listTMP$OPPListPred1), #
+							                            selected=listTMP$OPPListPred1),
 														
 														checkboxInput("SubFold", "SubFold", value=FALSE)
 														
@@ -87,10 +87,10 @@ navbarPage(actionLink('ResetSetting',   label=paste0("INPUT:___", labelInput), s
 														#############
 														############
 			fluidRow(column(3, conditionalPanel("input.Bath_Process =='Save'",
-                                     selectInput("Count_type", "Count_type", c("manual_count_full","auto_count_full","manual_count_model"), multiple=F,selected="manual_count_full"),
+                                     selectInput("Count_type", "Count_type", c("manual_count_full","auto_count_full","manual_count_model"), multiple=F,selected=type),
                                                                  ))),
 														#############
-			fluidRow(column(3, selectInput('site', 'site', width="1000px",multiple = F, listR_site,selected=site)
+			fluidRow(column(3, selectInput('site', 'site', width="1000px",multiple = F, c("138","30","19","20","82","71"),selected=site)
                                                                  )),
 														############
 			fluidRow(column(3, conditionalPanel("input.Bath_Process=='Error_calculate'",

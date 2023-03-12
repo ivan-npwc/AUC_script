@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMap">
+    <property name="title">
+     <string>Map</string>
+    </property>
+    <addaction name="actionZoom_In"/>
+    <addaction name="actionZoom_Out"/>
+    <addaction name="actionZoom_Full"/>
+    <addaction name="actionAdd_Layer"/>
+   </widget>
+   <addaction name="menuMap"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionZoom_In">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/qgis-qgs.ico</normaloff>:/images/qgis-qgs.ico</iconset>
+   </property>
+   <property name="text">
+    <string>pActionZoomIn</string>
+   </property>
+  </action>
+  <action name="actionZoom_Out">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/qgis-qlr.ico</normaloff>:/images/qgis-qlr.ico</iconset>
+   </property>
+   <property name="text">
+    <string>mpActionZoomOut</string>
+   </property>
+   <property name="toolTip">
+    <string>mpActionZoomOut</string>
+   </property>
+  </action>
+  <action name="actionZoom_Full">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/qgis.ico</normaloff>:/images/qgis.ico</iconset>
+   </property>
+   <property name="text">
+    <string>mpActionZoomFull</string>
+   </property>
+   <property name="toolTip">
+    <string>mpActionZoomFull</string>
+   </property>
+  </action>
+  <action name="actionAdd_Layer">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/browser.ico</normaloff>:/images/browser.ico</iconset>
+   </property>
+   <property name="text">
+    <string>mpActionAddLayer</string>
+   </property>
+   <property name="toolTip">
+    <string>mpActionAddLayer</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

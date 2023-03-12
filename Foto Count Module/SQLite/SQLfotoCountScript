@@ -1,0 +1,271 @@
+.open FotoCount.db
+------------------------------------------------------------------
+--таблица меток координат отмеченных животных
+-------------------------------------------------------------
+CREATE TABLE photo_count (
+label                    TEXT NOT NULL,
+r_year                   NUMERIC NOT NULL,                                                                                       
+site                     NUMERIC NOT NULL,
+r_date                   NUMERIC NOT NULL,
+time_start               NUMERIC NOT NULL,
+observer                 TEXT NOT NULL,  
+local_site               TEXT, 
+animal_type              TEXT NOT NULL, 
+iLeft                    NUMERIC NOT NULL,
+iTop                     NUMERIC NOT NULL,
+datecreated              NOT NULL  default current_timestamp, 
+file_name                TEXT NOT NULL,
+CONSTRAINT uniqLevelPhotoCount UNIQUE (r_year,site,time_start,observer,file_name,iLeft,iTop),
+FOREIGN KEY(r_year,site,time_start,observer,file_name) REFERENCES photo_count_files(r_year,site,time_start,observer,file_name)  
+ON DELETE CASCADE ON UPDATE CASCADE
+deferrable initially deferred
+);
+--------------------------------------
+--таблица файлов фотографий фотоучета
+--------------------------------------------------
+CREATE TABLE  photo_count_files (
+r_year                   NUMERIC NOT NULL, 
+site                     NUMERIC NOT NULL,
+r_date                   NUMERIC NOT NULL,
+time_start               NUMERIC NOT NULL,
+observer                 TEXT NOT NULL,            
+comment                  TEXT,
+datecreated              NOT NULL  default current_timestamp,
+file_name                TEXT NOT NULL,
+CONSTRAINT uniqLevelPhotoCount UNIQUE (r_year,site,time_start,observer,file_name),
+FOREIGN KEY(r_year,site,r_date,time_start,observer) REFERENCES photo_count_list(r_year,site,r_date,time_start,observer)
+ON DELETE CASCADE ON UPDATE CASCADE
+deferrable initially deferred
+);
+-----------------------------------------------------
+--таблица фотоучетов
+-------------------------------------------------
+CREATE TABLE  photo_count_list (
+r_year                   NUMERIC NOT NULL, 
+site                     NUMERIC NOT NULL,
+r_date                   NUMERIC NOT NULL,
+time_start               NUMERIC NOT NULL,
+observer                 TEXT NOT NULL,
+Comment                  TEXT,
+visibility               TEXT NOT NULL,
+rain                     TEXT NOT NULL,
+distance                 TEXT NOT NULL,
+type                     TEXT NOT NULL,
+quality                  TEXT NOT NULL,
+splash                   TEXT NOT NULL,
+datecreated              NOT NULL  default current_timestamp,
+species                  TEXT NOT NULL,
+CONSTRAINT uniqLevelPhotoCount UNIQUE   (r_year,site,r_date, time_start, observer)
+);
+---------------------------------
+--Создание учета
+-------------------------------------
+	PRAGMA foreign_keys=on;
+	INSERT INTO photo_count_list (
+	r_year,
+	site,
+	r_date,
+	time_start,
+	observer,
+	Comment,
+	visibility,                                               
+	rain,
+	distance,
+	type,
+	quality ,
+	splash,
+	datecreated,
+	species)
+	VALUES (
+	2017,
+	37,
+	20170831,
+	"12:41",
+	"UsatovIA",
+	"No comments",
+	"More then 500 meters",
+	"Slight rein",
+	"More then 500",
+	"Areal count",
+	"Not to bead" ,
+	"Moderate splash",
+	current_timestamp,
+	"Steller sea lion"
+	);
+	PRAGMA foreign_keys=off;
+-------------------------------------------------
+--добавление фотографий для учета
+-------------------------------------------------------------
+PRAGMA foreign_keys=on;
+INSERT INTO  photo_count_files (
+r_year,   
+site,
+r_date,
+time_start,
+observer,            
+comment,
+datecreated ,
+file_name
+)
+VALUES (
+2017,
+37,
+20170831,
+"12:41",
+"UsatovIA",
+"No comment",
+current_timestamp,
+"20170604_201750_Wq.JPG"
+);
+PRAGMA foreign_keys=off;
+-----------------------------------------------------------------
+--добавление точки учета
+-----------------------------------------------------------------------
+PRAGMA foreign_keys=on;
+INSERT INTO photo_count (
+label,
+r_year, 
+site,
+r_date,
+time_start,
+observer,  
+local_site, 
+animal_type, 
+iLeft,
+iTop,
+datecreated, 
+file_name)
+VALUES (
+7,
+2017,
+37,
+20170831,
+"12:41",
+"UsatovIA",
+"WP",
+"J",
+865,
+214,
+current_timestamp,
+"20170604_201750_Wq.JPG"
+);
+PRAGMA foreign_keys=off;
+------------------------------------------------------------------------
+--удаление учета и каскадно удаляется все записи о файлах и метках животных этого учета
+-----------------------------------------------------------------------
+PRAGMA foreign_keys=on;
+DELETE FROM photo_count_list
+WHERE    
+	r_date = 20170831 AND
+	time_start= "12:41" AND
+	observer= "UsatovIA" AND	
+	species= "Steller sea lion"
+	;
+PRAGMA foreign_keys=off;
+--------------------------------------------------------------------
+--удаление фотографии учета и каскадно удаляются метки для этой фотографии учета
+-------------------------------------------------------------------------------
+PRAGMA foreign_keys=on;
+DELETE FROM photo_count_files
+WHERE    
+	r_date = 20170831 AND
+	time_start= "12:41" AND
+	observer= "UsatovIA" AND	
+	site= 37 AND
+	file_name="20170604_201750_Wq.JPG"	
+	;
+PRAGMA foreign_keys=off;
+---------------------------------------------
+--УДАЛЕНИЕ ТОЧКИ ОТМЕЧЕННОГО ЖИВОТНОГО
+---------------------------------------------------------
+DELETE FROM photo_count WHERE rowid=1;
+----------------------------------------------
+--обновление информации о учете и каскадное обновление связаной информации в таблицах photo_count, photo_count_files
+----------------------------------------------------------------------------
+PRAGMA foreign_keys=on;
+UPDATE photo_count_list
+SET
+    r_year =2020,
+    site=42,
+    r_date= 20200101, 
+    time_start ="08:10", 
+    observer="VNB"
+
+WHERE  
+	r_date = 20170831 AND
+	time_start= "12:41" AND
+	observer= "UsatovIA" AND	
+	species= "Steller sea lion"
+	;
+PRAGMA foreign_keys=off;
+------------------------------------------------------------------------------------------------------
+--ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ФОТОГРАФИИ УЧЕТА И КАСКАДНОЕ ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ТОЧКАХ ЖИВОТНЫХ ЭТОЙ ФОТОГРАФИИ
+--------------------------------------------------------------------------------------------------------------
+PRAGMA foreign_keys=on;
+UPDATE photo_count_files
+SET
+    r_date = 20200831,
+	time_start= "08:10",
+	observer= "VNB",	
+	site= 37,
+	file_name="20170604_201750_WR.JPG"	
+
+WHERE    
+	r_date = 20170831 AND
+	time_start= "12:41" AND
+	observer= "UsatovIA" AND	
+	site= 37 AND
+	file_name="20170604_201750_Wq.JPG"	
+	;
+PRAGMA foreign_keys=off;
+----------------------------------------------------------------
+---ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ОТМЕЧЕННОМ ЖИВОТНОМ
+----------------------------------------------------
+UPDATE photo_count
+SET
+    label=45,
+    animal_type="SA"
+WHERE rowid=1;
+-----------------------------------
+--ВЫБОРКА 
+--ТАБЛИЦЫ photo_count_list для отображения информации о учете
+--------------------------------------------------------------------------
+SELECT * FROM photo_count_list
+WHERE
+    r_date = 20170831 AND
+	time_start= "12:41" AND
+	observer= "UsatovIA" AND	
+	species= "Steller sea lion"
+;
+-----------------------------------------
+--выборка 
+-- список учетов в 1 столбец
+--------------------------------------
+SELECT 
+r_date  || '_' || time_start || '_' || observer || '_' || species
+FROM photo_count_list;
+-----------------------------------------------------------
+--выборка таблица photo_count вся все метки как есть без агрегации
+------------------------------------------------------
+SELECT * FROM photo_count;
+-----------------------------------------------------
+--выборка
+--таблица photo_count группировка по дате и категории зверей
+-------------------------------------------------------------------
+SELECT 
+r_year,site,r_date,time_start,observer,local_site, animal_type, 
+COUNT(iLeft) AS count
+FROM photo_count
+GROUP BY r_date, animal_type;
+-------------------------------------------------------------------------
+--выборка для отображения списка зверей отмеченных на фотографии в 1 колонку
+--------------------------------------------------------------------
+SELECT
+animal_type || '_' || label|| '_' ||rowid
+FROM photo_count
+WHERE 
+site = 37 AND
+r_date=20170831 AND
+time_start= "12:41" AND
+observer="UsatovIA" AND
+file_name="20170604_201750_Wq.JPG";

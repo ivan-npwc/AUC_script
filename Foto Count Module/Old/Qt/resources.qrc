@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="/">
+    <file>images/browser.ico</file>
+    <file>images/qgis.ico</file>
+    <file>images/qgis-mime.ico</file>
+    <file>images/qgis-qgs.ico</file>
+    <file>images/qgis-qlr.ico</file>
+    <file>images/qgis-qml.ico</file>
+    <file>images/qgis-qpt.ico</file>
+  </qresource>
+</RCC>

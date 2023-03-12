@@ -13,7 +13,7 @@
 	trgt_size = 256
     modelREGpth <<-   paste0(System_data, "\\weights\\",LRGH_MSRMNTS)
 	ImgsPth= paste0(labelInput,"\\Predict\\",Species,"_Measurements\\Image")
-    pthFinWrite= paste0(labelInput,"\\Predict\\",Species,"_Measurements\\Predict_Measurements.csv")
+    pthFinWrite= paste0(labelInput,"\\Predict\\",Species,"_Measurements\\Predict_Measurements")
 	
 	
     date1=substr(basename(labelInput),1,15)
