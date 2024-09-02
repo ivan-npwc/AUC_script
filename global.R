@@ -25,7 +25,7 @@ if (!require("spatialEco")) {install.packages("spatialEco");library("spatialEco"
 if (!require("RSQLite")) {install.packages("RSQLite")}
 #if (!require("sparklyr")) {install.packages("sparklyr");library(sparklyr);spark_install(version = "2.1.0")}
 if (!require("writexl")) {install.packages("writexl")}
-if (!require("shinythemes")) {install.packages("shinythemes");; library("shinythemes")}
+if (!require("shinythemes")) {install.packages("shinythemes"); library("shinythemes")}
 
 #if (!requireNamespace("BiocManager", quietly = TRUE))
 #  install.packages("BiocManager")
@@ -46,6 +46,7 @@ labelInput<<-listValue$labelInput
 	
 NFS_Adult_weight_pth<<-listValue$NFS_Adult_weight_pth
 NFS_Pup_weight_pth<<-listValue$NFS_Pup_weight_pth
+NFS_AN_TF_UNET<<-listValue$NFS_AN_TF_UNET
 SSL_Adult_weight_pth<<-listValue$SSL_Adult_weight_pth
 SSL_Pup_weight_pth<<-listValue$SSL_Pup_weight_pth
 SSL_Age_pth <<-  listValue$SSL_Age_pth
@@ -58,6 +59,7 @@ LRGH_MSRMNTS  <<-listValue$LRGH_MSRMNTS
 key <<-  listValue$key
 SQLite_path<<-  listValue$SQLite_path
 
+NFS_Pup_weight_pth512 <<- listValue$NFS_Pup_weight_pth512
 #site   <<-  listValue$site
 
 KK_Effort <<-listValue$KK_Effort

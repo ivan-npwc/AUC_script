@@ -33,3 +33,16 @@ foreach(i = 1:length(MskList)) %dopar% {
    
    image_write(Check,PathCheckImg,format="jpg")
 }
+
+
+
+    pth=MskList[i]
+    mskP=paste0(Masks_Path,"/",pth) 
+    ImgP= paste0(Images_Path,"/",gsub("png","jpg",pth))
+    
+	img=readImage(ImgP)
+    msk=readImage(mskP)
+      y1 = channel(msk, 'asred')
+	  a= img+y1
+   PathCheckImg=paste0(Check_Path,"/",pth)
+   writeImage(a,PathCheckImg)
