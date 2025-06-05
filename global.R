@@ -4,12 +4,17 @@ if (!require("keras")) {install.packages("keras"); library("keras")}
 if (!require("XML")) {install.packages("XML"); library("XML")}
 if (!require("magick")) {install.packages("magick"); library("magick")}
 if (!require("filesstrings")) {install.packages("filesstrings"); library("filesstrings")}
+
 if (!require("abind")) {install.packages("abind"); library("abind")}
 if (!require("reticulate")) {install.packages("reticulate"); library("reticulate")}
 if (!require("parallel")) {install.packages("parallel"); library("parallel")}
 if (!require("doParallel")) {install.packages("doParallel"); library("doParallel")}
 if (!require("foreach")) {install.packages("foreach"); library("foreach")}
 if (!require("tensorflow")) {install.packages("tensorflow"); library("tensorflow")}
+if (!require("tfdatasets")) {install.packages("tfdatasets"); library("tfdatasets")}
+if (!require("purrr")) {install.packages("purrr"); library("purrr")}
+
+
 if (!require("sp")) {install.packages("sp"); library("sp")}
 if (!require("rgdal")) {install.packages("rgdal"); library("rgdal")}
 if (!require("geosphere")) {install.packages("geosphere"); library("geosphere")}
@@ -26,11 +31,16 @@ if (!require("RSQLite")) {install.packages("RSQLite")}
 #if (!require("sparklyr")) {install.packages("sparklyr");library(sparklyr);spark_install(version = "2.1.0")}
 if (!require("writexl")) {install.packages("writexl")}
 if (!require("shinythemes")) {install.packages("shinythemes"); library("shinythemes")}
-
+#install.packages(c("pkg1", "pkg2"))
 #if (!requireNamespace("BiocManager", quietly = TRUE))
 #  install.packages("BiocManager")
 #  BiocManager::install("EBImage")
-
+########################################
+#library(reticulate)
+#use_condaenv("base",required = TRUE)
+#py_config() 
+#library(tensorflow)
+#tf$config$list_physical_devices('GPU')
 #########################################################
 listValue <<- readRDS("listUniq")
 listTMP <<-readRDS("listTMP")
@@ -41,7 +51,8 @@ labelInput<<-listValue$labelInput
     pthOPP<<-substr(labelInput,0, nchar(labelInput)-nchaBName)
 	site   <<-  strsplit(basename(pthOPP),"_")[[1]][2]
 	
-    listOPP<<-list.files(pthOPP)
+  #  listOPP<<-list.files(pthOPP)
+  listOPP  <<-listValue$listOPP
 #pthOPP<<- listValue$pthOPP
 	
 NFS_Adult_weight_pth<<-listValue$NFS_Adult_weight_pth

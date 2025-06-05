@@ -1,22 +1,32 @@
 #https://blogs.rstudio.com/ai/posts/2019-08-23-unet/
 #https://www.kaggle.com/code/bigironsphere/loss-function-library-keras-pytorch#Combo-Loss    SEE FOR LOS
 #################################################################
-library(keras)
+
+   library(keras)
+   use_condaenv("base",required = TRUE)
+   library("reticulate")
+   conda_list <- conda_list()
+   print(conda_list)
+   Sys.sleep(5)
+   py_config() 
+  
 library(tfdatasets)
 library(tidyverse)
 library(rsample)
 library(reticulate)
 library(raster)
 library(unet)
+library(tensorflow)
+ 
+tf$config$list_physical_devices('GPU')
+##########################################
 # Parameters -----------------------------------------------------
+# List all available Conda environments	
+	trainDir =   "C:\\Users\\usato\\SSL_DB\\TRAIN\\TRAIN_pv\\No zero"
 	
 	
-	trainDir =  "C:\\Users\\usato\\SSL_DB\\TRAIN\\NFSpupFP"
-
-	Weight= "C:\\Users\\usato\\Documents\\YandexDisk\\System data\\weights\\NFSpupFP_20240714_val_051_epoch_39"
-	
-	epochs =10
-	batch_size=8L	
+	epochs =300
+	batch_size=12L	
 	vision_dimensions=256
 	ValTrainSplit = 0.9 #FIRST TRAIN 0.7 TO LOOK OVERFIT. SECOND TRAIN WITH EPOCH ACORDING FIRSt TRAIN
 	NotUseEmptyImgs = T
@@ -29,26 +39,33 @@ library(unet)
 	
 	shape=c(vision_dimensions,vision_dimensions,3)
 ##################################################################################
-     listImgS <<- list.files(images_dir)
-	 ImgsExten=extension(listImgS)[1]
-	 listImgSNoExt=substr(listImgS,1,nchar(listImgS)-nchar(ImgsExten))
-	                   if (length(listImgS)==0) {stop ("No Images found")}
+  ################################################################################
+ CheckImgMskDir=function (dirs) {  
+    images_dir=paste0(dirs,"/Image")
+masks_dir=paste0(dirs,"/Mask")
+listImgS <<- list.files(images_dir)
+ImgsExten=extension(listImgS)[1]
+listImgSNoExt=substr(listImgS,1,nchar(listImgS)-nchar(ImgsExten))
+                  if (length(listImgS)==0) {stop ("No Images found")}
      ListMskS<<- list.files(masks_dir)
-	 MskExten=extension(ListMskS)[1]
-	 MskNoExt=substr(ListMskS,1,nchar(ListMskS)-nchar(MskExten))
-     deleteListImgs<<- listImgSNoExt[!(listImgSNoExt %in% MskNoExt)] # here is IMGS DELETE without msk 
+MskExten=extension(ListMskS)[1]
+MskNoExt=substr(ListMskS,1,nchar(ListMskS)-nchar(MskExten))
+     deleteListImgs<<- listImgSNoExt[!(listImgSNoExt %in% MskNoExt)] # here is IMGS DELETE without msk
      deleteListMsks<<- MskNoExt[!(MskNoExt %in% listImgSNoExt)]
-     deleteListImgs1=paste0(images_dir,"\\",deleteListImgs,".jpg")
-	 deleteListImgs2=paste0(images_dir,"\\",deleteListImgs,".png")
-     deleteListMsk2=paste0(masks_dir,"\\",deleteListMsks,".png")
-	 
+     deleteListImgs1=paste0(images_dir,"/",deleteListImgs,".jpg")
+deleteListImgs2=paste0(images_dir,"/",deleteListImgs,".png")
+     deleteListMsk2=paste0(masks_dir,"/",deleteListMsks,".png")
     if (file.exists(deleteListImgs1[1])){unlink(deleteListImgs1, recursive=T)}
-	if (file.exists(deleteListImgs2[1])){unlink(deleteListImgs2, recursive=T) }
-	if (file.exists(deleteListMsk2[1])){unlink(deleteListMsk2)}
-	
-	 print(paste0("Found   ",length(list.files(masks_dir)), "  Masks"))
-	 print(paste0("Found   ",length(list.files(images_dir)), "  Image"))
-	 if (length(list.files(masks_dir)) != length(list.files(images_dir))) stop()
+if (file.exists(deleteListImgs2[1])){unlink(deleteListImgs2, recursive=T) }
+if (file.exists(deleteListMsk2[1])){unlink(deleteListMsk2)}
+print(paste0("Found   ",length(list.files(masks_dir)), "  Masks"))
+print(paste0("Found   ",length(list.files(images_dir)), "  Image"))
+if (length(list.files(masks_dir)) != length(list.files(images_dir))) stop()
+}
+  # CheckImgMskDir(trainDir)
+   ################################################
+	 print(paste0("Found   ",length(list.files(images_dir))))
+	 print(paste0("Found   ",length(list.files(masks_dir))))
 #################
 	
 	  data_tibl <- tibble::tibble(
@@ -64,42 +81,24 @@ library(unet)
    
 ##########################################################################
 ######################################
-source("C:\\Users\\usato\\SSL_DB\\AUC\\Modules\\UnetVGG16Create.r") #UnetVGG16Create
-
-
+source("C:\\Users\\usato\\SSL_DB\\AUC\\Modules\\UNET\\UnetVGG16CreateLRG.r") #UnetVGG16Create
  # SWeight=readRDS(Weight)
   # set_weights(unet1,SWeight)
-
-
  dice_coef <- custom_metric("dice_coef", function(y_true, y_pred, smooth = 1.0) {
   y_true_f <- k_flatten(y_true)
   y_pred_f <- k_flatten(y_pred)
   true_positives <- k_sum(y_true_f * y_pred_f)
   (true_positives*2 + smooth) / (k_sum(y_true_f) + k_sum(y_pred_f) + smooth)
 })
- #################################################################
- # dice_coef <- custom_metric("dice_coef", function(y_true, y_pred) {
- #  y_true_f <- k_flatten(y_true)
- # y_pred_f <- k_flatten(y_pred)
- # true_positives <- k_sum(y_true_f * y_pred_f)
-  
-#  PRED=k_sum(y_pred_f)
-#  OBS=k_sum(y_true_f)
-#  false_negatives=OBS-true_positives
-#  false_positives=PRED-true_positives
-  
- # true_positives / (true_positives + false_positives + false_negatives) # may by +1 to doping for start
-#})
- 
- dice_coef_loss <- function(y_true, y_pred) - dice_coef(y_true, y_pred)
 
+ dice_coef_loss <- function(y_true, y_pred) - dice_coef(y_true, y_pred)
 ###############################################################
 #unet1 <- load_model_hdf5(model_pth, custom_objects = c(dice_coef = dice_coef,
 #                                                        dice_coef_loss=dice_coef_loss))
 ###############################################################	 
-  unet1 <<- unet1 %>%
+  unet1 <- unet1 %>%
        compile(
-           optimizer = optimizer_adam(lr= 0.0001 , decay = 1e-6 ),
+           optimizer = optimizer_adam(lr= 0.00001 , decay = 1e-6 ),
            loss =     dice_coef_loss,#"binary_crossentropy", 
            metrics = dice_coef #, metric_binary_accuracy
               )
@@ -146,8 +145,8 @@ up_down <- function(img) {img %>% tf$image$flip_up_down()}
 	  dataset <- dataset %>% dataset_map(~.x %>% list_modify(img = up_down(.x$img))) 
 	  dataset <- dataset %>% dataset_map(~.x %>% list_modify(mask = up_down(.x$mask))) 
 	 }
-		dataset <- dataset %>% 
-	  dataset_shuffle(buffer_size = batch_size*vision_dimensions)	  
+#		dataset <- dataset %>% 
+#	  dataset_shuffle(buffer_size = batch_size*vision_dimensions)	  
 	 
 	 dataset3 <- dataset %>% 
 		dataset_batch(batch_size)
@@ -173,11 +172,12 @@ up_down <- function(img) {img %>% tf$image$flip_up_down()}
 		  mask = tf$image$resize(.x$mask, size = shape(vision_dimensions, vision_dimensions))
 		))
 		
-		dataset2 <- dataset %>% 
-		  dataset_shuffle(buffer_size = batch_size*vision_dimensions)	
+	#	dataset2 <- dataset %>% 
+	#	  dataset_shuffle(buffer_size = batch_size*vision_dimensions)	
 		  
 	  dataset3 <- dataset %>% 
 		dataset_batch(batch_size)
+		
 	  dataset3 %>% 
 		dataset_map(unname) # Keras needs an unnamed output.
 	}
@@ -186,7 +186,7 @@ up_down <- function(img) {img %>% tf$image$flip_up_down()}
 #####################################################################################################################
 # Training -----------------------------------------------------
 checkpoint_dir=paste0(trainDir,"\\Checkpoints");dir.create(checkpoint_dir,showWarnings = F)
-BaseName <<- basename(file.path(checkpoint_dir, "val_{val_dice_coef:.2f}_epoch_{epoch:02d}_512.h5"))
+BaseName <<- basename(file.path(checkpoint_dir, "val_{val_dice_coef:.2f}_epoch_{epoch:02d}.h5"))
 filepath <<- paste0(checkpoint_dir,"\\",Species,"_",dateTrain,"_",BaseName)
 output_name="train"
 
@@ -204,47 +204,14 @@ callbacks_list <- list(
 #                                mode = "max"),
   callback_model_checkpoint(filepath = filepath,
                             monitor = "dice_coef",
-							 period = 10)
+							 period = 4)
                            )
 #############################################################################
-unet1 %>%  keras:::fit.keras.engine.training.Model(
+unet1 %>% fit(
   training_dataset,  
   epochs = epochs,
   callbacks = callbacks_list, 
    validation_data = validation_dataset)
      
-
-#a=get_weights(unet1)
-#saveRDS(a,"1")
-##################################################################### CHECK
-# predictions=keras:::predict.keras.engine.training.Model(object=unet1,
-#                                                   x=training_dataset,
-#                                                   batch_size = 2,
-#                                                   verbose = 0,
-#                                                   steps = 1
-#                                                   )
-##################################################################
-#batch <- training_dataset %>% as_iterator() %>% iter_next()
-
-
-#images <- tibble(
-# image = batch[[1]] %>% array_branch(1),
-  #predicted_mask = predictions[,,,1] %>% array_branch(1),
-#  mask = batch[[2]][,,,1]  %>% array_branch(1)
-#) %>% 
-#  sample_n(2) %>% 
-#  map_depth(2, function(x) {
-#    as.raster(x) %>% magick::image_read()
-#  }) %>% 
-#  map(~do.call(c, .x))
-
-
-#out <- magick::image_append(c(
-#  magick::image_append(images$mask, stack = TRUE),
-#  magick::image_append(images$image, stack = TRUE) 
-# # magick::image_append(images$predicted_mask, stack = TRUE)
-#  )
-#)
-#plot(out)
 
 

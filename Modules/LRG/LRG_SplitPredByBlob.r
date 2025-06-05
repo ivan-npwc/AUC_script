@@ -125,9 +125,8 @@ for (f in 1:length(listPreds)) {
 	  lngth= round(geosphere::lengthLine(pts),digits = 2)*100 # IN SANTIMETERS
 	}
 	}
-	
 	  ########################################################### MAKE THE BLOB BIGER
-	  letter1=dilate(letter, makeBrush(241, shape='diamond'))
+	  letter1=dilate(letter, makeBrush(41, shape='diamond'))
 	  
 	  fts = data.frame(computeFeatures.moment(letter1))
 	  x=mean(fts$m.cx)
@@ -135,7 +134,8 @@ for (f in 1:length(listPreds)) {
 if (x>1024*0.25 & x<1024*0.75 & y>1024*0.25 & y<1024*0.75) { 
 
     imgpth=paste0(ImgDir,"\\",name)
-if( Type=="Predict"){NewImgPth=paste0(dirSave,"\\",file_path_sans_ext(name),"_",h,".",file_ext(name))}
+if( Type=="Predict"){lngth=NA
+                    NewImgPth=paste0(dirSave,"\\",file_path_sans_ext(name),"_",h,".",file_ext(name))}
 if( Type=="Train"){NewImgPth=paste0(dirSave,"\\",lngth,"_", file_path_sans_ext(name),"_",h,".",file_ext(name))}	
 	
 	
@@ -157,7 +157,6 @@ if( Type=="Train"){NewImgPth=paste0(dirSave,"\\",lngth,"_", file_path_sans_ext(n
     }
 
 	write.csv(tblB,pthtblB,row.names=F)
-	
 #########################################################	
 
 	

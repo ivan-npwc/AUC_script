@@ -1,7 +1,7 @@
 
 library(dplyr)
 TableCount=NULL
-pthDir="D:\\NFS\\2019_138_OPP"
+pthDir="D:\\NFS_DB\\2024_138_OPP"
 listSubdir=list.files(pthDir,full.names = T)
 #################################################################   count
 for (i in 1:length(listSubdir)) {
@@ -28,22 +28,24 @@ TableCount=rbind(tblMY1,TableCount)
 library(raster)
 library(spatialEco)
 library(dplyr)
+library(rgdal)
 
 SummaryTable=NULL
-pthFolders="D:\\NFS\\2019_138_OPP"
+pthFolders="D:\\NFS_DB\\2024_138_OPP"
 listFolder=list.files(pthFolders,full.names=T)
 
 
 for (i in 1:length(listFolder)) {
 
 date1=basename(listFolder[i])
-PthModelCount=paste0(pthFolders,"\\",date1,"\\Observer count\\",date1,".shp")   
+pth=
+PthModelCount=paste0(pthFolders,"\\",date1,"\\Observer_count\\",date1,".shp")   
 if (file.exists(PthModelCount)==T) {            
 ModelPoligon=paste0(pthFolders,"\\",date1,"\\Polygons\\Model\\Model.shp")
 PredictPoint=paste0(pthFolders,"\\",date1,"\\Predict\\NFSAdult_",date1,".csv")
 save_pth_check_diff=paste0(pthFolders,"\\",date1,"\\Predict\\Check_difference", date1, ".csv")
 
-ModelPoligon1 = shapefile(ModelPoligon)
+ModelPoligon1 = readOGR(ModelPoligon)
 ObserverPoint1= shapefile(PthModelCount)
 PredictPoint1=read.csv(PredictPoint)
 
@@ -208,12 +210,44 @@ ggplot(PlotTableCount, aes(x=date, y=TottalCount,fill="red")) +
     ggtitle("TF count")
 #######################################################################################
 	
+	Model
+	
+	#2021_Pryb_trainval_20221226#20220730_115353
 	
 	
 	
-	
-	
-	
+SummaryTable = NULL
+pthFolders="D:\\NFS_DB\\2024_138_OPP"
+listFolder=list.files(pthFolders,full.names=T)
+
+
+for (i in 1:length(listFolder)) {
+
+date1=basename(listFolder[i])
+pth=
+PthModelCount=paste0(pthFolders,"\\",date1,"\\Observer_count\\",date1,".shp")   
+if (file.exists(PthModelCount)==T) {            
+ModelPoligon=paste0(pthFolders,"\\",date1,"\\Polygons\\Model\\Model.shp")
+PredictPoint=paste0(pthFolders,"\\",date1,"\\Predict\\NFSAdult_",date1,".csv")
+save_pth_check_diff=paste0(pthFolders,"\\",date1,"\\Predict\\Check_difference", date1, ".csv")
+
+ModelPoligon1 = readOGR(ModelPoligon)
+ObserverPoint1= shapefile(PthModelCount)
+PredictPoint1=read.csv(PredictPoint)
+
+proj4string(ModelPoligon1) <- "+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs"		
+proj4string(ObserverPoint1) <- "+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs"	
+
+coords <- data.frame(lat= PredictPoint1$lon, lon=PredictPoint1$lat)   
+data   <- data.frame(age= PredictPoint1$age)   # data
+crs    <- CRS("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") 
+PredictPoints <- SpatialPointsDataFrame(coords = coords,
+                                        data = data, 
+                                        proj4string = crs)
+
+ObserverPoint2 <- point.in.poly(ObserverPoint1,ModelPoligon1)
+ObserverPoint3=as.data.frame(ObserverPoint2)
+ObserverPoint4=ObserverPoint3[is.na(ObserverPoint3[,3]) == F,]
 	
 	
 	

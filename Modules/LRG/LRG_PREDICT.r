@@ -11,9 +11,9 @@
 	labelInput
     Species  #= "LRG"          
 	trgt_size = 256
-    modelPTH <<-   paste0(System_data, "\\weights\\",LRGH_MSRMNTS)
+    modelREGpth <<-   paste0(System_data, "\\weights\\",LRGH_MSRMNTS)
 	ImgsPth= paste0(labelInput,"\\Predict\\",Species,"_Measurements\\Image")
-    pthFinWrite= paste0(labelInput,"\\Predict\\",Species,"_Measurements\\Predict_Measurements",)
+    pthFinWrite= paste0(labelInput,"\\Predict\\",Species,"_Measurements\\Predict_Measurements.csv")
 	
 	
     date1=substr(basename(labelInput),1,15)
@@ -35,7 +35,6 @@
       return(result)
 	}
 ##################################
-
 if (length(listImgPred)>0) {
 finWrite=NULL
 for (u in 1: length(listImgPred)) {
@@ -48,9 +47,25 @@ for (u in 1: length(listImgPred)) {
 }
 } 
 write.csv(finWrite,pthFinWrite, row.names=F)
-
-
-
 #################################################################################################
+
+for (i in 1:length(listImgPred)) {
+
+oldName=listImgPred[i]
+pred=round(finWrite$preds[finWrite$imgPth==listImgPred[i]])
+newNmae=paste0(ImgsPth,"\\",pred,"#",basename(oldName))
+file.rename(oldName,newNmae)
+
+}
+
+
+
+
+
+
+
+
+
+
 
 

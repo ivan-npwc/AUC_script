@@ -1,7 +1,9 @@
-library(keras)
 
-#ModelConvert= "C:\\Users\\Ivan\\Desktop\\NFS_Adult_20201225_Val_0.85_epoch_02_256.h5"
-ModelConvert=file.choose()
+library(keras)
+library(reticulate)
+use_condaenv("base",required = TRUE)
+#py_config() 
+ModelConvert=  "C:\\Users\\usato\\SSL_DB\\TRAIN\\TRAIN_pv\\Unet_new data\\Checkpoints\\Unet_new data_20250520_val_0.53_epoch_200.h5"
 
 
 filepathRDS=tools::file_path_sans_ext(ModelConvert)
@@ -19,11 +21,11 @@ dice_coef_loss <- function(y_true, y_pred) -dice_coef(y_true, y_pred)
 attr(dice_coef_loss, "py_function_name") <- "dice_coef_loss"
 
 ##########################################
-bce_dice_loss <- function(y_true, y_pred) {
-  result <- loss_binary_crossentropy(y_true, y_pred) +
-    (1 - dice_coef(y_true, y_pred))
-  return(result)
-}
+#bce_dice_loss <- function(y_true, y_pred) {
+#  result <- loss_binary_crossentropy(y_true, y_pred) +
+#    (1 - dice_coef(y_true, y_pred))
+#  return(result)
+#}
 
 
 unet1 <- load_model_hdf5(ModelConvert, custom_objects = c(dice_coef = dice_coef,

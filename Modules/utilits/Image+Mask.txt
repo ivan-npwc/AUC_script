@@ -1,9 +1,10 @@
 library (magick)
 
 generalPath= paste0(labelInput,"\\Mask_Image")
-ImagePath=paste0(generalPath,"\\", "BlobMask")
+ImagePath=paste0(generalPath,"\\", "Image")
 MaskPath=paste0(generalPath,"\\", "Mask")
 PathCheck=paste0(generalPath,"\\", "Check")
+unlink(PathCheck, recursive=T)
 dir.create(PathCheck)
 MskList=list.files(MaskPath)
 
@@ -36,13 +37,13 @@ foreach(i = 1:length(MskList)) %dopar% {
 
 
 
-    pth=MskList[i]
-    mskP=paste0(Masks_Path,"/",pth) 
-    ImgP= paste0(Images_Path,"/",gsub("png","jpg",pth))
+  #  pth=MskList[i]
+  #  mskP=paste0(Masks_Path,"/",pth) 
+  #  ImgP= paste0(Images_Path,"/",gsub("png","jpg",pth))
     
-	img=readImage(ImgP)
-    msk=readImage(mskP)
-      y1 = channel(msk, 'asred')
-	  a= img+y1
-   PathCheckImg=paste0(Check_Path,"/",pth)
-   writeImage(a,PathCheckImg)
+#	img=readImage(ImgP)
+#    msk=readImage(mskP)
+#      y1 = channel(msk, 'asred')
+#	  a= img+y1
+#   PathCheckImg=paste0(Check_Path,"/",pth)
+#   writeImage(a,PathCheckImg)
